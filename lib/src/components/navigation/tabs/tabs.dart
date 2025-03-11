@@ -14,8 +14,8 @@ class Tabs extends StatelessWidget {
     this.padding,
   });
 
-  Widget _childBuilder(
-      BuildContext context, TabContainerData data, Widget child) {
+  Widget _childBuilder(BuildContext context, TabContainerData data,
+      Widget child) {
     final theme = Theme.of(context);
     final scaling = theme.scaling;
     final i = data.index;
@@ -29,19 +29,30 @@ class Tabs extends StatelessWidget {
         cursor: SystemMouseCursors.click,
         child: AnimatedContainer(
           duration: const Duration(
-              milliseconds: 50), // slightly faster than kDefaultDuration
+              milliseconds: 50),
+          // slightly faster than kDefaultDuration
           alignment: Alignment.center,
           padding: padding ??
               const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 4,
-                  ) *
+                horizontal: 16,
+                vertical: 4,
+              ) *
                   scaling,
           decoration: BoxDecoration(
             color: i == index ? theme.colorScheme.background : null,
             borderRadius: BorderRadius.circular(
               theme.radiusMd,
             ),
+            boxShadow: i == index
+                ? [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                spreadRadius: 0,
+                blurRadius: 2,
+                offset: const Offset(0, 1),
+              )
+            ]
+                : null,
           ),
           child: (i == index ? child.foreground() : child.muted())
               .small()
