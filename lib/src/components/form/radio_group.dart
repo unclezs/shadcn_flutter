@@ -231,7 +231,7 @@ class _RadioCardState<T> extends State<RadioCard<T>> {
             child: Card(
               borderColor: groupData?.selectedItem == widget.value
                   ? theme.colorScheme.primary
-                  : theme.colorScheme.muted,
+                  : theme.colorScheme.border,
               borderWidth: groupData?.selectedItem == widget.value
                   ? 2 * theme.scaling
                   : 1 * theme.scaling,
