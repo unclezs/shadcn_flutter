@@ -243,7 +243,7 @@ class _RadioCardState<T> extends State<RadioCard<T>> {
                   ? theme.colorScheme.muted
                   : theme.colorScheme.background,
               child: Container(
-                padding: EdgeInsets.all(16 * theme.scaling),
+                padding: EdgeInsets.all(0 * theme.scaling),
                 child: AnimatedPadding(
                   duration: kDefaultDuration,
                   padding: groupData?.selectedItem == widget.value
