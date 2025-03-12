@@ -139,7 +139,7 @@ class TabContainer extends StatelessWidget {
               childBuilder: childBuilder,
             ),
             child: child,
-          ),
+          ).expanded(),
         );
         index++;
       } else {
