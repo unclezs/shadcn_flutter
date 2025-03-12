@@ -1729,7 +1729,7 @@ Decoration _buttonOutlineDecoration(
   var themeData = Theme.of(context);
   if (states.contains(WidgetState.disabled)) {
     return BoxDecoration(
-      color: themeData.colorScheme.border.withValues(
+      color: themeData.colorScheme.muted.withValues(
         alpha: 0,
       ),
       border: Border.all(
@@ -1743,7 +1743,7 @@ Decoration _buttonOutlineDecoration(
     return BoxDecoration(
       color: themeData.colorScheme.muted.scaleAlpha(0.8),
       border: Border.all(
-        color: themeData.colorScheme.muted.scaleAlpha(0.8),
+        color: themeData.colorScheme.border.scaleAlpha(0.8),
         width: 1,
       ),
       borderRadius: BorderRadius.circular(themeData.radiusMd),
@@ -1752,7 +1752,7 @@ Decoration _buttonOutlineDecoration(
   return BoxDecoration(
     color: themeData.colorScheme.muted.withValues(alpha: 0),
     border: Border.all(
-      color: themeData.colorScheme.muted,
+      color: themeData.colorScheme.border,
       width: 1,
     ),
     borderRadius: BorderRadius.circular(themeData.radiusMd),
