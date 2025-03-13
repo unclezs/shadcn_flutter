@@ -40,8 +40,7 @@ class Basic extends StatelessWidget {
     final scaling = theme.scaling;
     return Padding(
       padding: padding ?? EdgeInsets.zero,
-      child: IntrinsicWidth(
-        child: IntrinsicHeight(
+      child: IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -98,7 +97,6 @@ class Basic extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }
