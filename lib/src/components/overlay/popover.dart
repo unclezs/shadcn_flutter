@@ -8,6 +8,7 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class PopoverOverlayHandler extends OverlayHandler {
   const PopoverOverlayHandler();
+
   @override
   OverlayCompleter<T> show<T>({
     required BuildContext context,
@@ -110,7 +111,7 @@ class PopoverOverlayHandler extends OverlayHandler {
                       duration: isClosed.value
                           ? (showDuration ?? kDefaultDuration)
                           : (dismissDuration ??
-                              const Duration(milliseconds: 100)),
+                          const Duration(milliseconds: 100)),
                       onEnd: (value) {
                         if (value == 0.0 && isClosed.value) {
                           popoverEntry.remove();
@@ -222,6 +223,7 @@ class PopoverAnchor extends StatefulWidget {
   final Animation<double> animation;
   final PopoverConstraint widthConstraint;
   final PopoverConstraint heightConstraint;
+
   // final PopoverRoute? route;
   final FutureVoidCallback? onClose;
   final VoidCallback? onImmediateClose;
@@ -367,17 +369,29 @@ class PopoverAnchorState extends State<PopoverAnchor>
   }
 
   Size? get anchorSize => _anchorSize;
+
   AlignmentGeometry get anchorAlignment => _anchorAlignment;
+
   Offset? get position => _position;
+
   AlignmentGeometry get alignment => _alignment;
+
   PopoverConstraint get widthConstraint => _widthConstraint;
+
   PopoverConstraint get heightConstraint => _heightConstraint;
+
   Offset? get offset => _offset;
+
   EdgeInsetsGeometry? get margin => _margin;
+
   bool get follow => _follow;
+
   BuildContext get anchorContext => _anchorContext;
+
   bool get allowInvertHorizontal => _allowInvertHorizontal;
+
   bool get allowInvertVertical => _allowInvertVertical;
+
   @override
   set alignment(AlignmentGeometry value) {
     if (_alignment != value) {
@@ -481,6 +495,10 @@ class PopoverAnchorState extends State<PopoverAnchor>
   void _tick(Duration elapsed) {
     if (!mounted || !anchorContext.mounted) return;
     // update position based on anchorContext
+    var box = anchorContext.findRenderObject();
+    if (!(box is RenderBox?)) {
+      return;
+    }
     RenderBox? renderBox = anchorContext.findRenderObject() as RenderBox?;
     if (renderBox != null) {
       Offset pos = renderBox.localToGlobal(Offset.zero);
@@ -508,8 +526,8 @@ class PopoverAnchorState extends State<PopoverAnchor>
         // enabled: widget.consumeOutsideTaps,
         onTapOutside: widget.onTapOutside != null
             ? (event) {
-                widget.onTapOutside?.call();
-              }
+          widget.onTapOutside?.call();
+        }
             : null,
         groupId: widget.regionGroupId,
         child: MediaQuery.removePadding(
@@ -710,11 +728,11 @@ class PopoverController extends ChangeNotifier {
 
   bool get hasOpenPopover =>
       _openPopovers.isNotEmpty &&
-      _openPopovers.any((element) => !element.entry.isCompleted);
+          _openPopovers.any((element) => !element.entry.isCompleted);
 
   bool get hasMountedPopover =>
       _openPopovers.isNotEmpty &&
-      _openPopovers.any((element) => !element.entry.isAnimationCompleted);
+          _openPopovers.any((element) => !element.entry.isAnimationCompleted);
 
   Iterable<Popover> get openPopovers => List.unmodifiable(_openPopovers);
 
@@ -892,6 +910,7 @@ class PopoverLayout extends SingleChildRenderObjectWidget {
   final FilterQuality? filterQuality;
   final bool allowInvertHorizontal;
   final bool allowInvertVertical;
+
   const PopoverLayout({
     super.key,
     required this.alignment,
@@ -930,8 +949,8 @@ class PopoverLayout extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(
-      BuildContext context, covariant PopoverLayoutRender renderObject) {
+  void updateRenderObject(BuildContext context,
+      covariant PopoverLayoutRender renderObject) {
     bool hasChanged = false;
     if (renderObject._alignment != alignment) {
       renderObject._alignment = alignment;
@@ -1024,7 +1043,8 @@ class PopoverLayoutRender extends RenderShiftedBox {
     FilterQuality? filterQuality,
     bool allowInvertHorizontal = true,
     bool allowInvertVertical = true,
-  })  : _alignment = alignment,
+  })
+      : _alignment = alignment,
         _position = position,
         _anchorAlignment = anchorAlignment,
         _widthConstraint = widthConstraint,
@@ -1115,9 +1135,9 @@ class PopoverLayoutRender extends RenderShiftedBox {
         }
       } else {
         final Matrix4 effectiveTransform =
-            Matrix4.translationValues(offset.dx, offset.dy, 0.0)
-              ..multiply(transform)
-              ..translate(-offset.dx, -offset.dy);
+        Matrix4.translationValues(offset.dx, offset.dy, 0.0)
+          ..multiply(transform)
+          ..translate(-offset.dx, -offset.dy);
         final ui.ImageFilter filter = ui.ImageFilter.matrix(
           effectiveTransform.storage,
           filterQuality: _filterQuality!,
@@ -1235,13 +1255,13 @@ class PopoverLayoutRender extends RenderShiftedBox {
     final double dx = left < 0
         ? -left
         : right > size.width
-            ? size.width - right
-            : 0;
+        ? size.width - right
+        : 0;
     final double dy = top < 0
         ? -top
         : bottom > size.height
-            ? size.height - bottom
-            : 0;
+        ? size.height - bottom
+        : 0;
     Offset result = Offset(x + dx + offsetX, y + dy + offsetY);
     BoxParentData childParentData = child!.parentData as BoxParentData;
     childParentData.offset = result;
