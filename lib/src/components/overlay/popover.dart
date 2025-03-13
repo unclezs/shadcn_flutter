@@ -515,6 +515,10 @@ class PopoverOverlayWidgetState extends State<PopoverOverlayWidget>
   void _tick(Duration elapsed) {
     if (!mounted || !anchorContext.mounted) return;
     // update position based on anchorContext
+    var box = anchorContext.findRenderObject();
+    if (!(box is RenderBox?)) {
+      return;
+    }
     RenderBox? renderBox = anchorContext.findRenderObject() as RenderBox?;
     if (renderBox != null) {
       Offset pos = renderBox.localToGlobal(Offset.zero);
