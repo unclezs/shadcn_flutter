@@ -42,7 +42,7 @@ class _AlertDialogState extends State<AlertDialog> {
         backgroundColor: themeData.colorScheme.popover,
         borderRadius: themeData.borderRadiusXxl,
         borderWidth: 1 * scaling,
-        borderColor: themeData.colorScheme.muted,
+        borderColor: themeData.colorScheme.border,
         padding: widget.padding ?? EdgeInsets.all(24 * scaling),
         surfaceBlur: widget.surfaceBlur ?? themeData.surfaceBlur,
         surfaceOpacity: widget.surfaceOpacity ?? themeData.surfaceOpacity,
@@ -66,7 +66,7 @@ class _AlertDialogState extends State<AlertDialog> {
                           if (widget.title != null)
                             widget.title!.large().semiBold(),
                           if (widget.content != null)
-                            widget.content!.small().muted(),
+                            widget.content!,
                         ],
                       ).gap(8 * scaling),
                     ),
