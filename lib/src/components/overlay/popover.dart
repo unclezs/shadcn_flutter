@@ -46,7 +46,7 @@ class PopoverOverlayHandler extends OverlayHandler {
     final data = Data.capture(from: context, to: overlay.context);
 
     Size? anchorSize;
-    if (position == null) {
+    if (position == null) { 
       RenderBox renderBox = context.findRenderObject() as RenderBox;
       Offset pos = renderBox.localToGlobal(Offset.zero);
       anchorSize ??= renderBox.size;
@@ -516,7 +516,7 @@ class PopoverOverlayWidgetState extends State<PopoverOverlayWidget>
     if (!mounted || !anchorContext.mounted) return;
     // update position based on anchorContext
     var box = anchorContext.findRenderObject();
-    if (!(box is RenderBox?)) {
+    if (box is! RenderBox?) {
       return;
     }
     RenderBox? renderBox = anchorContext.findRenderObject() as RenderBox?;
