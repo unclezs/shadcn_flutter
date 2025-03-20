@@ -409,14 +409,17 @@ class ContextMenu extends StatefulWidget {
   final HitTestBehavior behavior;
   final Axis direction;
   final bool enabled;
+  final bool enablePress;
 
-  const ContextMenu(
-      {super.key,
-      required this.child,
-      required this.items,
-      this.behavior = HitTestBehavior.translucent,
-      this.direction = Axis.vertical,
-      this.enabled = true});
+  const ContextMenu({
+    super.key,
+    required this.child,
+    required this.items,
+    this.behavior = HitTestBehavior.translucent,
+    this.direction = Axis.vertical,
+    this.enabled = true,
+    this.enablePress = true,
+  });
 
   @override
   State<ContextMenu> createState() => _ContextMenuState();
@@ -436,7 +439,7 @@ class _ContextMenuState extends State<ContextMenu> {
     super.didUpdateWidget(oldWidget);
     if (!listEquals(widget.items, oldWidget.items)) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        if(mounted) _children.value = widget.items;
+        if (mounted) _children.value = widget.items;
       });
     }
   }
@@ -462,6 +465,12 @@ class _ContextMenuState extends State<ContextMenu> {
                   context, details.globalPosition, _children, widget.direction);
             },
       onLongPressStart: enableLongPress && widget.enabled
+          ? (details) {
+              _showContextMenu(
+                  context, details.globalPosition, _children, widget.direction);
+            }
+          : null,
+      onTapUp: widget.enablePress && !enableLongPress
           ? (details) {
               _showContextMenu(
                   context, details.globalPosition, _children, widget.direction);
