@@ -183,8 +183,10 @@ class _CheckboxState extends State<Checkbox>
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (widget.leading != null) widget.leading!.small().medium(),
-          SizedBox(width: theme.scaling * 8),
+          if (widget.leading != null) ...[
+            widget.leading!.small().medium(),
+            SizedBox(width: theme.scaling * 8),
+          ],
           AnimatedContainer(
             duration: kDefaultDuration,
             width: theme.scaling * 16,

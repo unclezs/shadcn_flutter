@@ -415,10 +415,20 @@ class ContextMenu extends StatefulWidget {
     super.key,
     required this.child,
     required this.items,
-    this.behavior = HitTestBehavior.translucent,
+    this.behavior = HitTestBehavior.opaque,
     this.direction = Axis.vertical,
     this.enabled = true,
     this.enablePress = true,
+  });
+
+  const ContextMenu.translucent({
+    super.key,
+    required this.child,
+    required this.items,
+    this.behavior = HitTestBehavior.translucent,
+    this.direction = Axis.vertical,
+    this.enabled = true,
+    this.enablePress = false,
   });
 
   @override
@@ -456,6 +466,9 @@ class _ContextMenuState extends State<ContextMenu> {
     final bool enableLongPress = platform == TargetPlatform.iOS ||
         platform == TargetPlatform.android ||
         platform == TargetPlatform.fuchsia;
+
+    print(
+        "enablePress: ${widget.enablePress}. enableLongPress: $enableLongPress. ${widget.enablePress && !enableLongPress}");
     return GestureDetector(
       behavior: widget.behavior,
       onSecondaryTapDown: !widget.enabled
@@ -464,13 +477,13 @@ class _ContextMenuState extends State<ContextMenu> {
               _showContextMenu(
                   context, details.globalPosition, _children, widget.direction);
             },
-      onLongPressStart: enableLongPress && widget.enabled
+      onLongPressStart: enableLongPress && widget.enabled && !widget.enablePress
           ? (details) {
               _showContextMenu(
                   context, details.globalPosition, _children, widget.direction);
             }
           : null,
-      onTapUp: widget.enablePress && !enableLongPress
+      onTapUp: widget.enablePress && widget.enabled
           ? (details) {
               _showContextMenu(
                   context, details.globalPosition, _children, widget.direction);
