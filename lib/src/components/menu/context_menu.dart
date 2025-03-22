@@ -467,8 +467,6 @@ class _ContextMenuState extends State<ContextMenu> {
         platform == TargetPlatform.android ||
         platform == TargetPlatform.fuchsia;
 
-    print(
-        "enablePress: ${widget.enablePress}. enableLongPress: $enableLongPress. ${widget.enablePress && !enableLongPress}");
     return GestureDetector(
       behavior: widget.behavior,
       onSecondaryTapDown: !widget.enabled

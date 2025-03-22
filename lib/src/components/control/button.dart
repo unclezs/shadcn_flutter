@@ -2208,11 +2208,18 @@ TextStyle _buttonMenuTextStyle(BuildContext context, Set<WidgetState> states) {
   var themeData = Theme.of(context);
   if (states.contains(WidgetState.disabled)) {
     return themeData.typography.small.copyWith(
-      color: themeData.colorScheme.accentForeground.scaleAlpha(0.5),
+      color: themeData.colorScheme.mutedForeground,
+    );
+  }
+  if (states.contains(WidgetState.focused) ||
+      states.contains(WidgetState.hovered) ||
+      states.contains(WidgetState.selected)) {
+    return themeData.typography.small.copyWith(
+      color: themeData.colorScheme.accentForeground,
     );
   }
   return themeData.typography.small.copyWith(
-    color: themeData.colorScheme.accentForeground,
+    color: themeData.colorScheme.foreground,
   );
 }
 
@@ -2236,8 +2243,20 @@ EdgeInsets _buttonMenubarPadding(
 IconThemeData _buttonMenuIconTheme(
     BuildContext context, Set<WidgetState> states) {
   var themeData = Theme.of(context);
+  if (states.contains(WidgetState.disabled)) {
+    return IconThemeData(
+      color: themeData.colorScheme.mutedForeground,
+    );
+  }
+  if (states.contains(WidgetState.focused) ||
+      states.contains(WidgetState.hovered) ||
+      states.contains(WidgetState.selected)) {
+    return IconThemeData(
+      color: themeData.colorScheme.accentForeground,
+    );
+  }
   return IconThemeData(
-    color: themeData.colorScheme.accentForeground,
+    color: themeData.colorScheme.foreground,
   );
 }
 
