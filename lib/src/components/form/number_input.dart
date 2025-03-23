@@ -57,6 +57,7 @@ class _NumberInputState extends State<NumberInput>
     super.initState();
     _lastValidValue = widget.initialValue;
     _controller = widget.controller ?? TextEditingController();
+    _controller.text = _valueAsString;
     _controller.addListener(_onTextChanged);
     formValue = _lastValidValue;
   }
