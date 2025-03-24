@@ -537,7 +537,7 @@ class _DrawerWrapperState extends State<DrawerWrapper>
               if (widget.showDragHandle) ...[
                 Gap(widget.gapBeforeDragger ?? 12 * theme.scaling),
                 buildDraggableBar(theme),
-                Gap(widget.gapAfterDragger ?? 16 * theme.scaling),
+                Gap(widget.gapAfterDragger ?? 0),
               ],
               Flexible(
                 child: AnimatedBuilder(
