@@ -5,22 +5,30 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class AdaptiveScaling {
   static const AdaptiveScaling desktop = AdaptiveScaling();
-  static const AdaptiveScaling mobile = AdaptiveScaling(1.25);
+  static const AdaptiveScaling mobile = AdaptiveScaling.only(
+    radiusScaling: 1,
+    sizeScaling: 1.25,
+    textScaling: 1.1,
+    iconScaling: 1.25,
+  );
   final double radiusScaling;
   final double sizeScaling;
   final double textScaling;
+  final double iconScaling;
 
   const AdaptiveScaling([double scaling = 1])
       : this.only(
           radiusScaling: scaling,
           sizeScaling: scaling,
           textScaling: scaling,
+          iconScaling: scaling,
         );
 
   const AdaptiveScaling.only({
     this.radiusScaling = 1,
     this.sizeScaling = 1,
     this.textScaling = 1,
+    this.iconScaling = 1,
   });
 
   ThemeData scale(ThemeData theme) {
@@ -28,7 +36,7 @@ class AdaptiveScaling {
       radius: radiusScaling == 1 ? null : theme.radius * radiusScaling,
       scaling: sizeScaling == 1 ? null : theme.scaling * sizeScaling,
       typography: textScaling == 1 ? null : theme.typography.scale(textScaling),
-      iconTheme: textScaling == 1 ? null : theme.iconTheme.scale(textScaling),
+      iconTheme: iconScaling == 1 ? null : theme.iconTheme.scale(iconScaling),
     );
   }
 
@@ -41,6 +49,7 @@ class AdaptiveScaling {
       radiusScaling: lerpDouble(a.radiusScaling, b.radiusScaling, t)!,
       sizeScaling: lerpDouble(a.sizeScaling, b.sizeScaling, t)!,
       textScaling: lerpDouble(a.textScaling, b.textScaling, t)!,
+      iconScaling: lerpDouble(a.iconScaling, b.iconScaling, t)!,
     );
   }
 }
@@ -489,7 +498,6 @@ class ComponentTheme<T> extends InheritedTheme {
     return oldWidget.data != data;
   }
 }
-
 
 enum ThemeMode {
   system,

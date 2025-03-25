@@ -816,8 +816,12 @@ class ButtonSize {
   static const ButtonSize normal = ButtonSize(1);
   static const ButtonSize xSmall = ButtonSize(1 / 2);
   static const ButtonSize small = ButtonSize(3 / 4);
-  static const ButtonSize large = ButtonSize(2);
-  static const ButtonSize xLarge = ButtonSize(3);
+  static const ButtonSize large = ButtonSize(1.25);
+  static const ButtonSize xLarge = ButtonSize(1.5);
+  static const ButtonSize xxLarge = ButtonSize(1.75);
+  static const ButtonSize xxxLarge = ButtonSize(2);
+  static const ButtonSize xxxxLarge = ButtonSize(2.5);
+  static const ButtonSize xxxxxLarge = ButtonSize(3);
 }
 
 typedef DensityModifier = EdgeInsets Function(EdgeInsets padding);
