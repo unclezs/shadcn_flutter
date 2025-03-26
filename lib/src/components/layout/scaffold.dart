@@ -159,7 +159,7 @@ class ScaffoldState extends State<Scaffold> {
             buildHeader(context),
             LayoutBuilder(builder: (context, constraints) {
               Widget child = Container(
-                padding: viewInsets,
+                // padding: viewInsets,
                 child: ToastLayer(child: widget.child),
               );
               if (constraints is ScaffoldBoxConstraints &&

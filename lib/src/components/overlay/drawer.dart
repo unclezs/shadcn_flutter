@@ -116,7 +116,7 @@ Future<T?> openDrawer<T>({
   bool showDragHandle = true,
   BorderRadiusGeometry? borderRadius,
   Size? dragHandleSize,
-  bool transformBackdrop = true,
+  bool transformBackdrop = false,
   double? surfaceOpacity,
   double? surfaceBlur,
   Color? barrierColor,

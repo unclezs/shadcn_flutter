@@ -6,7 +6,7 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 class AdaptiveScaling {
   static const AdaptiveScaling desktop = AdaptiveScaling();
   static const AdaptiveScaling mobile = AdaptiveScaling.only(
-    radiusScaling: 1,
+    radiusScaling: 1.25,
     sizeScaling: 1.25,
     textScaling: 1.1,
     iconScaling: 1.25,
