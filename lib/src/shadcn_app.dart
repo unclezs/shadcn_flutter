@@ -500,14 +500,8 @@ class ShadcnLayer extends StatelessWidget {
         ? appScaling.scale(darkTheme ?? theme)
         : appScaling.scale(theme);
     return OverlayManagerLayer(
-      menuHandler: menuHandler ??
-          (mobileMode
-              ? const SheetOverlayHandler()
-              : const PopoverOverlayHandler()),
-      popoverHandler: popoverHandler ??
-          (mobileMode
-              ? const SheetOverlayHandler()
-              : const PopoverOverlayHandler()),
+      menuHandler: menuHandler ?? (const PopoverOverlayHandler()),
+      popoverHandler: popoverHandler ?? (const PopoverOverlayHandler()),
       tooltipHandler: tooltipHandler ??
           (mobileMode
               ? const FixedTooltipOverlayHandler()
