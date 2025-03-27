@@ -297,6 +297,7 @@ Future<T?> showDialog<T>({
     context: context,
     builder: builder,
     themes: themes,
+    fullScreen: fullScreen,
     barrierDismissible: barrierDismissible,
     barrierColor: barrierColor ?? const Color.fromRGBO(0, 0, 0, 0),
     barrierLabel: barrierLabel,
