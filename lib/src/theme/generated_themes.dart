@@ -118,50 +118,6 @@ class ColorSchemes {
     );
   }
 
-  static ColorScheme darkZincX() {
-    return ColorScheme(
-      brightness: Brightness.dark,
-      background: Color(0XFF000000),
-      foreground: const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      card: Color(0XFF0C0C0C),
-      cardForeground: const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      popover: const HSLColor.fromAHSL(1, 240.0, 0.1, 0.039).toColor(),
-      popoverForeground: const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      primary: const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      primaryForeground:
-          const HSLColor.fromAHSL(1, 240.0, 0.059, 0.1).toColor(),
-      secondary: const HSLColor.fromAHSL(1, 240.0, 0.037, 0.159).toColor(),
-      secondaryForeground: const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      muted: const HSLColor.fromAHSL(1, 240.0, 0.037, 0.159).toColor(),
-      mutedForeground: const HSLColor.fromAHSL(1, 240.0, 0.05, 0.649).toColor(),
-      accent: const HSLColor.fromAHSL(1, 240.0, 0.037, 0.159).toColor(),
-      accentForeground: const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      destructive: const HSLColor.fromAHSL(1, 0.0, 0.628, 0.306).toColor(),
-      destructiveForeground:
-          const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      border: Color(0XFF333333),
-      input: const HSLColor.fromAHSL(1, 240.0, 0.037, 0.159).toColor(),
-      ring: const HSLColor.fromAHSL(1, 240.0, 0.049, 0.839).toColor(),
-      chart1: const HSLColor.fromAHSL(1, 220.0, 0.7, 0.5).toColor(),
-      chart2: const HSLColor.fromAHSL(1, 160.0, 0.6, 0.45).toColor(),
-      chart3: const HSLColor.fromAHSL(1, 30.0, 0.8, 0.55).toColor(),
-      chart4: const HSLColor.fromAHSL(1, 280.0, 0.65, 0.6).toColor(),
-      chart5: const HSLColor.fromAHSL(1, 340.0, 0.75, 0.55).toColor(),
-      sidebarBackground:
-          const HSLColor.fromAHSL(1, 240.0, 0.059, 0.1).toColor(),
-      sidebarForeground:
-          const HSLColor.fromAHSL(1, 240.0, 0.048, 0.959).toColor(),
-      sidebarPrimary: const HSLColor.fromAHSL(1, 224.3, 0.763, 0.48).toColor(),
-      sidebarPrimaryForeground:
-          const HSLColor.fromAHSL(1, 0.0, 0.0, 1.0).toColor(),
-      sidebarAccent: const HSLColor.fromAHSL(1, 240.0, 0.037, 0.159).toColor(),
-      sidebarAccentForeground:
-          const HSLColor.fromAHSL(1, 240.0, 0.048, 0.959).toColor(),
-      sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.037, 0.159).toColor(),
-      sidebarRing: const HSLColor.fromAHSL(1, 217.2, 0.912, 0.598).toColor(),
-    );
-  }
-
   static ColorScheme zinc(ThemeMode mode) {
     assert(() {
       _assertNotThemeModeSystem(mode, 'Zinc');
