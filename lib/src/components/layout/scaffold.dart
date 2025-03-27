@@ -16,6 +16,7 @@ class Scaffold extends StatefulWidget {
   final Color? footerBackgroundColor;
   final Color? backgroundColor;
   final bool showLoadingSparks;
+  final bool useSafeArea;
 
   const Scaffold({
     super.key,
@@ -30,6 +31,7 @@ class Scaffold extends StatefulWidget {
     this.headerBackgroundColor,
     this.footerBackgroundColor,
     this.showLoadingSparks = false,
+    this.useSafeArea = true,
   });
 
   @override
@@ -149,41 +151,42 @@ class ScaffoldState extends State<Scaffold> {
     final theme = Theme.of(context);
     final viewInsets = MediaQuery.viewInsetsOf(context);
     final currentMediaQuery = MediaQuery.of(context);
+    final child = _ScaffoldFlex(
+      floatingHeader: widget.floatingHeader,
+      floatingFooter: widget.floatingFooter,
+      children: [
+        buildHeader(context),
+        LayoutBuilder(builder: (context, constraints) {
+          Widget child = Container(
+            // padding: viewInsets,
+            child: ToastLayer(child: widget.child),
+          );
+          if (constraints is ScaffoldBoxConstraints &&
+              (widget.floatingHeader || widget.floatingFooter)) {
+            final currentMediaQuery = MediaQuery.of(context);
+            EdgeInsets padding = currentMediaQuery.padding;
+            if (widget.floatingHeader) {
+              padding += EdgeInsets.only(top: constraints.headerHeight);
+            }
+            if (widget.floatingFooter) {
+              padding += EdgeInsets.only(bottom: constraints.footerHeight);
+            }
+            child = MediaQuery(
+              data: currentMediaQuery.copyWith(
+                padding: padding,
+              ),
+              child: child,
+            );
+          }
+          return child;
+        }),
+        buildFooter(context, viewInsets),
+      ],
+    );
     return DrawerOverlay(
       child: Container(
         color: widget.backgroundColor ?? theme.colorScheme.background,
-        child: _ScaffoldFlex(
-          floatingHeader: widget.floatingHeader,
-          floatingFooter: widget.floatingFooter,
-          children: [
-            buildHeader(context),
-            LayoutBuilder(builder: (context, constraints) {
-              Widget child = Container(
-                // padding: viewInsets,
-                child: ToastLayer(child: widget.child),
-              );
-              if (constraints is ScaffoldBoxConstraints &&
-                  (widget.floatingHeader || widget.floatingFooter)) {
-                final currentMediaQuery = MediaQuery.of(context);
-                EdgeInsets padding = currentMediaQuery.padding;
-                if (widget.floatingHeader) {
-                  padding += EdgeInsets.only(top: constraints.headerHeight);
-                }
-                if (widget.floatingFooter) {
-                  padding += EdgeInsets.only(bottom: constraints.footerHeight);
-                }
-                child = MediaQuery(
-                  data: currentMediaQuery.copyWith(
-                    padding: padding,
-                  ),
-                  child: child,
-                );
-              }
-              return child;
-            }),
-            buildFooter(context, viewInsets),
-          ],
-        ),
+        child: widget.useSafeArea ? SafeArea(child: child) : child,
       ),
     );
   }
