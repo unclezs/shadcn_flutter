@@ -3470,11 +3470,13 @@ class IconButton extends StatelessWidget {
   final GestureLongPressUpCallback? onSecondaryLongPress;
   final GestureLongPressUpCallback? onTertiaryLongPress;
   final AbstractButtonStyle variance;
+  final String? tooltip;
 
   const IconButton({
     super.key,
     required this.icon,
     required this.variance,
+    this.tooltip,
     this.onPressed,
     this.enabled,
     this.leading,
@@ -3510,6 +3512,7 @@ class IconButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.enabled,
+    this.tooltip,
     this.leading,
     this.trailing,
     this.alignment,
@@ -3544,6 +3547,7 @@ class IconButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.enabled,
+    this.tooltip,
     this.leading,
     this.trailing,
     this.alignment,
@@ -3578,6 +3582,7 @@ class IconButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.enabled,
+    this.tooltip,
     this.leading,
     this.trailing,
     this.alignment,
@@ -3612,6 +3617,7 @@ class IconButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.enabled,
+    this.tooltip,
     this.leading,
     this.trailing,
     this.alignment,
@@ -3646,6 +3652,7 @@ class IconButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.enabled,
+    this.tooltip,
     this.leading,
     this.trailing,
     this.alignment,
@@ -3680,6 +3687,7 @@ class IconButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.enabled,
+    this.tooltip,
     this.leading,
     this.trailing,
     this.alignment,
@@ -3714,6 +3722,7 @@ class IconButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.enabled,
+    this.tooltip,
     this.leading,
     this.trailing,
     this.alignment,
@@ -3745,7 +3754,7 @@ class IconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Button(
+    Widget child = Button(
       onPressed: onPressed,
       enabled: enabled,
       leading: leading,
@@ -3779,6 +3788,13 @@ class IconButton extends StatelessWidget {
       onTertiaryLongPress: onTertiaryLongPress,
       child: icon,
     );
+    if (tooltip != null) {
+      child = Tooltip(
+        tooltip: TooltipContainer(child: Text(tooltip!)),
+        child: child,
+      );
+    }
+    return child;
   }
 }
 
