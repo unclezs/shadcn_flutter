@@ -396,7 +396,6 @@ class PopoverOverlayWidgetState extends State<PopoverOverlayWidget>
   bool get allowInvertVertical => _allowInvertVertical;
   LayerLink? get layerLink => _layerLink;
 
-  @override
   set layerLink(LayerLink? value) {
     if (_layerLink != value) {
       setState(() {
@@ -612,8 +611,8 @@ Future<void> closePopover<T>(BuildContext context, [T? result]) {
 class OverlayPopoverEntry<T> implements OverlayCompleter<T> {
   late OverlayEntry _overlayEntry;
   late OverlayEntry? _barrierEntry;
-  final Completer<T> completer = Completer();
-  final Completer<T> animationCompleter = Completer<T>();
+  final Completer<T?> completer = Completer();
+  final Completer<T?> animationCompleter = Completer();
 
   bool _removed = false;
   bool _disposed = false;
@@ -643,10 +642,10 @@ class OverlayPopoverEntry<T> implements OverlayCompleter<T> {
   }
 
   @override
-  Future<T> get future => completer.future;
+  Future<T?> get future => completer.future;
 
   @override
-  Future<T> get animationFuture => animationCompleter.future;
+  Future<T?> get animationFuture => animationCompleter.future;
 
   @override
   bool get isAnimationCompleted => animationCompleter.isCompleted;
