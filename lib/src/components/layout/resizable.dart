@@ -380,7 +380,8 @@ class _ResizablePaneState extends State<ResizablePane> {
           if (controller.collapsed) {
             size = widget.collapsedSize;
           } else {
-            size = controller.value;
+            // 防止精度丢失
+            size = controller.value.toInt().toDouble();
           }
         } else if (_controller is FlexibleResizablePaneController) {
           final controller = _controller as FlexibleResizablePaneController;

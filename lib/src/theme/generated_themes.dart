@@ -156,16 +156,17 @@ class ColorSchemes {
       chart3: const HSLColor.fromAHSL(1, 197.0, 0.37, 0.24).toColor(),
       chart4: const HSLColor.fromAHSL(1, 43.0, 0.74, 0.66).toColor(),
       chart5: const HSLColor.fromAHSL(1, 27.0, 0.87, 0.67).toColor(),
-      sidebarBackground: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
-      sidebarForeground: const HSLColor.fromAHSL(1, 240.0, 0.1, 0.04).toColor(),
-      sidebarPrimary: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      sidebarBackground: const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
+      sidebarForeground:
+          const HSLColor.fromAHSL(1, 240.0, 0.053, 0.261).toColor(),
+      sidebarPrimary: const HSLColor.fromAHSL(1, 240.0, 0.059, 0.1).toColor(),
       sidebarPrimaryForeground:
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      sidebarAccent: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      sidebarAccent: const HSLColor.fromAHSL(1, 240.0, 0.048, 0.959).toColor(),
       sidebarAccentForeground:
-          const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
-      sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+          const HSLColor.fromAHSL(1, 240.0, 0.059, 0.1).toColor(),
+      sidebarBorder: const HSLColor.fromAHSL(1, 220.0, 0.13, 0.91).toColor(),
+      sidebarRing: const HSLColor.fromAHSL(1, 217.2, 0.912, 0.598).toColor(),
     );
   }
 
@@ -888,16 +889,17 @@ class ColorSchemes {
       chart3: const HSLColor.fromAHSL(1, 197.0, 0.37, 0.24).toColor(),
       chart4: const HSLColor.fromAHSL(1, 43.0, 0.74, 0.66).toColor(),
       chart5: const HSLColor.fromAHSL(1, 27.0, 0.87, 0.67).toColor(),
-      sidebarBackground: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
-      sidebarForeground: const HSLColor.fromAHSL(1, 240.0, 0.1, 0.04).toColor(),
-      sidebarPrimary: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      sidebarBackground: const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
+      sidebarForeground:
+          const HSLColor.fromAHSL(1, 240.0, 0.053, 0.261).toColor(),
+      sidebarPrimary: const HSLColor.fromAHSL(1, 240.0, 0.059, 0.1).toColor(),
       sidebarPrimaryForeground:
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      sidebarAccent: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      sidebarAccent: const HSLColor.fromAHSL(1, 240.0, 0.048, 0.959).toColor(),
       sidebarAccentForeground:
-          const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
-      sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
-      sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+          const HSLColor.fromAHSL(1, 240.0, 0.059, 0.1).toColor(),
+      sidebarBorder: const HSLColor.fromAHSL(1, 220.0, 0.13, 0.91).toColor(),
+      sidebarRing: const HSLColor.fromAHSL(1, 217.2, 0.912, 0.598).toColor(),
     );
   }
 
