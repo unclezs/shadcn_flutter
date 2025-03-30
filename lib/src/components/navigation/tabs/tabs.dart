@@ -5,6 +5,7 @@ class Tabs extends StatelessWidget {
   final ValueChanged<int> onChanged;
   final List<TabChild> children;
   final EdgeInsetsGeometry? padding;
+  final double? borderRadius;
 
   const Tabs({
     super.key,
@@ -12,10 +13,11 @@ class Tabs extends StatelessWidget {
     required this.onChanged,
     required this.children,
     this.padding,
+    this.borderRadius,
   });
 
-  Widget _childBuilder(BuildContext context, TabContainerData data,
-      Widget child) {
+  Widget _childBuilder(
+      BuildContext context, TabContainerData data, Widget child) {
     final theme = Theme.of(context);
     final scaling = theme.scaling;
     final i = data.index;
@@ -28,15 +30,14 @@ class Tabs extends StatelessWidget {
         hitTestBehavior: HitTestBehavior.translucent,
         cursor: SystemMouseCursors.click,
         child: AnimatedContainer(
-          duration: const Duration(
-              milliseconds: 50),
+          duration: const Duration(milliseconds: 50),
           // slightly faster than kDefaultDuration
           alignment: Alignment.center,
           padding: padding ??
               const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 4,
-              ) *
+                    horizontal: 16,
+                    vertical: 4,
+                  ) *
                   scaling,
           decoration: BoxDecoration(
             color: i == index ? theme.colorScheme.background : null,
@@ -45,13 +46,13 @@ class Tabs extends StatelessWidget {
             ),
             boxShadow: i == index
                 ? [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                spreadRadius: 0,
-                blurRadius: 2,
-                offset: const Offset(0, 1),
-              )
-            ]
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      spreadRadius: 0,
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    )
+                  ]
                 : null,
           ),
           child: (i == index ? child.foreground() : child.muted())
@@ -73,7 +74,9 @@ class Tabs extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: theme.colorScheme.muted,
-            borderRadius: BorderRadius.circular(theme.radiusLg),
+            borderRadius: BorderRadius.circular(
+              borderRadius ?? theme.radiusLg,
+            ),
           ),
           padding: const EdgeInsets.all(4) * scaling,
           child: IntrinsicHeight(
