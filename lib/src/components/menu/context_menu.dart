@@ -410,6 +410,7 @@ class ContextMenu extends StatefulWidget {
   final Axis direction;
   final bool enabled;
   final bool enablePress;
+  final VoidCallback? onDismissed;
 
   const ContextMenu({
     super.key,
@@ -419,6 +420,7 @@ class ContextMenu extends StatefulWidget {
     this.direction = Axis.vertical,
     this.enabled = true,
     this.enablePress = true,
+    this.onDismissed,
   });
 
   const ContextMenu.translucent({
@@ -429,6 +431,7 @@ class ContextMenu extends StatefulWidget {
     this.direction = Axis.vertical,
     this.enabled = true,
     this.enablePress = false,
+    this.onDismissed,
   });
 
   @override
@@ -471,20 +474,35 @@ class _ContextMenuState extends State<ContextMenu> {
       behavior: widget.behavior,
       onSecondaryTapDown: !widget.enabled
           ? null
-          : (details) {
-              _showContextMenu(
-                  context, details.globalPosition, _children, widget.direction);
+          : (details) async {
+              await _showContextMenu(
+                context,
+                details.globalPosition,
+                _children,
+                widget.direction,
+              );
+              widget.onDismissed?.call();
             },
       onLongPressStart: enableLongPress && widget.enabled && !widget.enablePress
-          ? (details) {
-              _showContextMenu(
-                  context, details.globalPosition, _children, widget.direction);
+          ? (details) async {
+              await _showContextMenu(
+                context,
+                details.globalPosition,
+                _children,
+                widget.direction,
+              );
+              widget.onDismissed?.call();
             }
           : null,
       onTapUp: widget.enablePress && widget.enabled
-          ? (details) {
-              _showContextMenu(
-                  context, details.globalPosition, _children, widget.direction);
+          ? (details) async {
+              await _showContextMenu(
+                context,
+                details.globalPosition,
+                _children,
+                widget.direction,
+              );
+              widget.onDismissed?.call();
             }
           : null,
       child: widget.child,
