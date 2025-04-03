@@ -688,9 +688,11 @@ class _ResizerState extends State<_Resizer> {
   }
 
   void _onDragCancel() {
-    _dragSession!.reset();
-    widget.panelState.updateDraggers(_dragSession!.items);
-    _dragSession = null;
+    if (_dragSession != null) {
+      _dragSession!.reset();
+      widget.panelState.updateDraggers(_dragSession!.items);
+      _dragSession = null;
+    }
   }
 
   @override
