@@ -17,6 +17,7 @@ class Scaffold extends StatefulWidget {
   final Color? backgroundColor;
   final bool showLoadingSparks;
   final bool useSafeArea;
+  final bool viewInsets;
 
   const Scaffold({
     super.key,
@@ -32,6 +33,7 @@ class Scaffold extends StatefulWidget {
     this.footerBackgroundColor,
     this.showLoadingSparks = false,
     this.useSafeArea = true,
+    this.viewInsets = true,
   });
 
   @override
@@ -128,25 +130,22 @@ class ScaffoldState extends State<Scaffold> {
   }
 
   Widget buildFooter(BuildContext context, EdgeInsets viewInsets) {
-    return Offstage(
-      offstage: viewInsets.bottom > 0,
-      child: RepaintBoundary(
-        child: Container(
-          color: widget.footerBackgroundColor,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              for (var i = 0; i < widget.footers.length; i++)
-                Data.inherit(
-                  data: ScaffoldBarData(
-                    isHeader: false,
-                    childIndex: i,
-                    childrenCount: widget.footers.length,
-                  ),
-                  child: widget.footers[i],
+    return RepaintBoundary(
+      child: Container(
+        color: widget.footerBackgroundColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < widget.footers.length; i++)
+              Data.inherit(
+                data: ScaffoldBarData(
+                  isHeader: false,
+                  childIndex: i,
+                  childrenCount: widget.footers.length,
                 ),
-            ],
-          ),
+                child: widget.footers[i],
+              ),
+          ],
         ),
       ),
     );
@@ -163,7 +162,7 @@ class ScaffoldState extends State<Scaffold> {
         buildHeader(context),
         LayoutBuilder(builder: (context, constraints) {
           Widget child = Container(
-            // padding: viewInsets,
+            padding: widget.viewInsets ? viewInsets : null,
             child: ToastLayer(child: widget.child),
           );
           if (constraints is ScaffoldBoxConstraints &&
@@ -422,7 +421,7 @@ class _AppBarState extends State<AppBar> {
                             ).gap(widget.trailingGap ?? (4 * scaling)),
                           ),
                     ],
-                  ).gap(18 * scaling),
+                  ).gap(10),
                 ),
               ),
             ),
