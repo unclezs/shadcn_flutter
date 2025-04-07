@@ -39,6 +39,7 @@ class _AlertDialogState extends State<AlertDialog> {
       surfaceClip: ModalBackdrop.shouldClipSurface(
           widget.surfaceOpacity ?? themeData.surfaceOpacity),
       child: ModalContainer(
+        clipBehavior: Clip.antiAlias,
         fillColor: themeData.colorScheme.popover,
         filled: true,
         borderRadius: themeData.borderRadiusXxl,
@@ -66,8 +67,7 @@ class _AlertDialogState extends State<AlertDialog> {
                         children: [
                           if (widget.title != null)
                             widget.title!.large().semiBold(),
-                          if (widget.content != null)
-                            widget.content!,
+                          if (widget.content != null) widget.content!,
                         ],
                       ).gap(8 * scaling),
                     ),
