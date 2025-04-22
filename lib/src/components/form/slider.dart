@@ -211,9 +211,9 @@ class _SliderState extends State<Slider>
     if (widget.divisions != null) {
       value = value.roundToDivisions(widget.divisions!);
     }
-    if (value != widget.value) {
-      widget.onChangeEnd?.call(value);
-    }
+    // if (value != widget.value) {
+    widget.onChangeEnd?.call(value);
+    // }
   }
 
   @override
@@ -589,7 +589,7 @@ class _SliderState extends State<Slider>
 
     return AnimatedValueBuilder(
         value: widget.hintValue,
-        duration: _dragging ? Duration.zero : kDefaultDuration,
+        duration: Duration.zero,
         curve: Curves.easeInOut,
         lerp: SliderValue.lerp,
         builder: (context, hintValue, _) {
@@ -644,9 +644,7 @@ class _SliderState extends State<Slider>
 
     return AnimatedValueBuilder(
         value: Offset(newStart, newEnd),
-        duration: _dragging && widget.divisions == null
-            ? Duration.zero
-            : kDefaultDuration,
+        duration: Duration.zero,
         curve: Curves.easeInOut,
         lerp: Offset.lerp,
         builder: (context, value, _) {
@@ -715,9 +713,7 @@ class _SliderState extends State<Slider>
       value = (value * widget.divisions!).round() / widget.divisions!;
     }
     return AnimatedValueBuilder(
-        duration: _dragging && widget.divisions == null
-            ? Duration.zero
-            : kDefaultDuration,
+        duration: Duration.zero,
         curve: Curves.easeInOut,
         lerp: lerpDouble,
         value: value,

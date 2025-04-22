@@ -39,8 +39,8 @@ class Typography {
   final TextStyle textMuted;
 
   const Typography.geist({
-    this.sans = const TextStyle(fontFamily: '', package: 'shadcn_flutter'),
-    this.mono = const TextStyle(fontFamily: '', package: 'shadcn_flutter'),
+    this.sans = const TextStyle(),
+    this.mono = const TextStyle(),
     this.xSmall = const TextStyle(fontSize: 12),
     this.small = const TextStyle(fontSize: 14),
     this.base = const TextStyle(fontSize: 16),
