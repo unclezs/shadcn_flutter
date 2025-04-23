@@ -13,6 +13,7 @@ DrawerOverlayCompleter<T?> openDrawerOverlay<T>({
   bool expands = false,
   bool draggable = true,
   bool barrierDismissible = true,
+  bool useRootDrawerOverlay = true,
   WidgetBuilder? backdropBuilder,
   bool useSafeArea = true,
   bool showDragHandle = true,
@@ -32,6 +33,7 @@ DrawerOverlayCompleter<T?> openDrawerOverlay<T>({
     barrierDismissible: barrierDismissible,
     backdropBuilder: backdropBuilder,
     useSafeArea: useSafeArea,
+    useRootDrawerOverlay: useRootDrawerOverlay,
     transformBackdrop: transformBackdrop,
     animationController: animationController,
     autoOpen: autoOpen,
@@ -123,6 +125,7 @@ Future<T?> openDrawer<T>({
   AnimationController? animationController,
   BoxConstraints? constraints,
   AlignmentGeometry? alignment,
+  bool useRootDrawerOverlay = true,
 }) {
   return openDrawerOverlay<T>(
     context: context,
@@ -143,6 +146,7 @@ Future<T?> openDrawer<T>({
     animationController: animationController,
     constraints: constraints,
     alignment: alignment,
+    useRootDrawerOverlay: useRootDrawerOverlay,
   ).future;
 }
 
