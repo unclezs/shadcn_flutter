@@ -54,6 +54,8 @@ class ControlledSelect<T> extends StatelessWidget
   final SelectValueSelectionHandler<T>? valueSelectionHandler;
   @override
   final SelectValueSelectionPredicate<T>? valueSelectionPredicate;
+  @override
+  final Predicate<T>? showValuePredicate;
 
   const ControlledSelect({
     super.key,
@@ -78,6 +80,7 @@ class ControlledSelect<T> extends StatelessWidget
     required this.itemBuilder,
     this.valueSelectionHandler,
     this.valueSelectionPredicate,
+    this.showValuePredicate,
   });
 
   @override
@@ -104,6 +107,7 @@ class ControlledSelect<T> extends StatelessWidget
           itemBuilder: itemBuilder,
           valueSelectionHandler: valueSelectionHandler,
           valueSelectionPredicate: valueSelectionPredicate,
+          showValuePredicate: showValuePredicate,
           popup: popup,
         );
       },
@@ -166,6 +170,8 @@ class ControlledMultiSelect<T> extends StatelessWidget
   final SelectValueSelectionHandler<Iterable<T>>? valueSelectionHandler;
   @override
   final SelectValueSelectionPredicate<Iterable<T>>? valueSelectionPredicate;
+  @override
+  final Predicate<Iterable<T>>? showValuePredicate;
   final SelectValueBuilder<T> multiItemBuilder;
 
   const ControlledMultiSelect({
@@ -187,6 +193,7 @@ class ControlledMultiSelect<T> extends StatelessWidget
     this.disableHoverEffect = false,
     this.canUnselect = true,
     this.autoClosePopover = false,
+    this.showValuePredicate,
     required this.popup,
     required SelectValueBuilder<T> itemBuilder,
     this.valueSelectionHandler,
@@ -215,6 +222,9 @@ class ControlledMultiSelect<T> extends StatelessWidget
       autoClosePopover: autoClosePopover,
       popup: popup,
       itemBuilder: itemBuilder,
+      showValuePredicate: (test) {
+        return test.isNotEmpty && (showValuePredicate?.call(test) ?? true);
+      },
       valueSelectionHandler:
           valueSelectionHandler ?? _defaultMultiSelectValueSelectionHandler,
       valueSelectionPredicate:
@@ -227,11 +237,13 @@ class SelectItemButton<T> extends StatelessWidget {
   final T value;
   final Widget child;
   final AbstractButtonStyle style;
+  final bool? enabled;
 
   const SelectItemButton({
     super.key,
     required this.value,
     required this.child,
+    this.enabled,
     this.style = const ButtonStyle.ghost(),
   });
 
@@ -243,11 +255,12 @@ class SelectItemButton<T> extends StatelessWidget {
     bool isSelected = data?.isSelected(value) ?? false;
     bool hasSelection = data?.hasSelection ?? false;
     return Button(
+      enabled: enabled,
       disableTransition: true,
       alignment: AlignmentDirectional.centerStart,
       onPressed: () {
-        data?.selectItem(value, !isSelected);
-      },
+              data?.selectItem(value, !isSelected);
+            },
       style: style.copyWith(
         padding: (context, states, value) => EdgeInsets.symmetric(
           vertical: 8 * scaling,
@@ -404,6 +417,7 @@ mixin SelectBase<T> {
   SelectValueBuilder<T> get itemBuilder;
   SelectValueSelectionHandler<T>? get valueSelectionHandler;
   SelectValueSelectionPredicate<T>? get valueSelectionPredicate;
+  Predicate<T>? get showValuePredicate;
 }
 
 class Select<T> extends StatefulWidget with SelectBase<T> {
@@ -446,6 +460,8 @@ class Select<T> extends StatefulWidget with SelectBase<T> {
   final SelectValueSelectionHandler<T>? valueSelectionHandler;
   @override
   final SelectValueSelectionPredicate<T>? valueSelectionPredicate;
+  @override
+  final Predicate<T>? showValuePredicate;
 
   const Select({
     super.key,
@@ -467,6 +483,7 @@ class Select<T> extends StatefulWidget with SelectBase<T> {
     this.enabled,
     this.valueSelectionHandler,
     this.valueSelectionPredicate,
+    this.showValuePredicate,
     required this.popup,
     required this.itemBuilder,
   });
@@ -653,7 +670,10 @@ class SelectState<T> extends State<Select<T>>
                       hasSelection: widget.value != null,
                     ),
                     child: Expanded(
-                      child: widget.value != null
+                      child: widget.value != null &&
+                              (widget.showValuePredicate
+                                      ?.call(widget.value as T) ??
+                                  true)
                           ? Builder(builder: (context) {
                               return widget.itemBuilder(
                                 context,
@@ -756,6 +776,8 @@ class MultiSelect<T> extends StatelessWidget with SelectBase<Iterable<T>> {
   @override
   final SelectValueSelectionPredicate<Iterable<T>>? valueSelectionPredicate;
   final SelectValueBuilder<T> multiItemBuilder;
+  @override
+  final Predicate<Iterable<T>>? showValuePredicate;
 
   const MultiSelect({
     super.key,
@@ -777,6 +799,7 @@ class MultiSelect<T> extends StatelessWidget with SelectBase<Iterable<T>> {
     this.enabled,
     this.valueSelectionHandler,
     this.valueSelectionPredicate,
+    this.showValuePredicate,
     required this.popup,
     required SelectValueBuilder<T> itemBuilder,
   }) : multiItemBuilder = itemBuilder;
@@ -816,6 +839,9 @@ class MultiSelect<T> extends StatelessWidget with SelectBase<Iterable<T>> {
       canUnselect: canUnselect,
       autoClosePopover: autoClosePopover ?? true,
       enabled: enabled,
+      showValuePredicate: (test) {
+        return test.isNotEmpty && (showValuePredicate?.call(test) ?? true);
+      },
       valueSelectionHandler:
           valueSelectionHandler ?? _defaultMultiSelectValueSelectionHandler,
       valueSelectionPredicate:

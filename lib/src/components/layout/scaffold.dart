@@ -18,6 +18,7 @@ class Scaffold extends StatefulWidget {
   final bool showLoadingSparks;
   final bool useSafeArea;
   final bool viewInsets;
+  final bool? resizeToAvoidBottomInset;
 
   const Scaffold({
     super.key,
@@ -34,6 +35,7 @@ class Scaffold extends StatefulWidget {
     this.showLoadingSparks = false,
     this.useSafeArea = true,
     this.viewInsets = true,
+    this.resizeToAvoidBottomInset,
   });
 
   @override
@@ -161,10 +163,21 @@ class ScaffoldState extends State<Scaffold> {
       children: [
         buildHeader(context),
         LayoutBuilder(builder: (context, constraints) {
-          Widget child = Container(
-            padding: widget.viewInsets ? viewInsets : null,
-            child: ToastLayer(child: widget.child),
-          );
+           Widget child = (widget.resizeToAvoidBottomInset ?? true)
+                  ? Container(
+                      padding: EdgeInsets.only(
+                        bottom: viewInsets.bottom,
+                      ),
+                      child: MediaQuery(
+                        data: MediaQuery.of(context).copyWith(
+                          viewInsets: viewInsets.copyWith(
+                            bottom: 0,
+                          ),
+                        ),
+                        child: ToastLayer(child: widget.child),
+                      ),
+                    )
+                  : ToastLayer(child: widget.child);
           if (constraints is ScaffoldBoxConstraints &&
               (widget.floatingHeader || widget.floatingFooter)) {
             final currentMediaQuery = MediaQuery.of(context);
