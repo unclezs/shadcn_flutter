@@ -398,7 +398,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.36"
+    version: "0.0.37"
   shared_preferences:
     dependency: "direct main"
     description:
