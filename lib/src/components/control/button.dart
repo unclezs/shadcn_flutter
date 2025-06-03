@@ -657,8 +657,9 @@ class Button extends StatefulWidget {
 
 class ButtonState<T extends Button> extends State<T> {
   bool get _shouldEnableFeedback {
-    final platform = Theme.of(context).platform;
-    return isMobile(platform);
+    // final platform = Theme.of(context).platform;
+    // return isMobile(platform);
+    return false;
   }
 
   AbstractButtonStyle? _style;
