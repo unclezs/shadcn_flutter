@@ -1990,7 +1990,11 @@ class TextFieldState extends State<TextField>
             _formatSubmit();
           },
           onSubmitted: (value) {
-            widget.onSubmitted?.call(value);
+            if (widget.onSubmitted == null) {
+              FocusScope.of(context).unfocus();
+            } else {
+              widget.onSubmitted?.call(value);
+            }
             _formatSubmit();
           },
           onTapOutside: widget.onTapOutside,
