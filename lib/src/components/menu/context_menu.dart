@@ -440,6 +440,7 @@ class ContextMenu extends StatefulWidget {
 
 class _ContextMenuState extends State<ContextMenu> {
   late ValueNotifier<List<MenuItem>> _children;
+  OverlayCompleter<void>? _overlayCompleter;
 
   @override
   void initState() {
@@ -461,6 +462,8 @@ class _ContextMenuState extends State<ContextMenu> {
   void dispose() {
     _children.dispose();
     super.dispose();
+    _overlayCompleter?.remove();
+    _overlayCompleter?.dispose();
   }
 
   @override
@@ -475,34 +478,40 @@ class _ContextMenuState extends State<ContextMenu> {
       onSecondaryTapDown: !widget.enabled
           ? null
           : (details) async {
-              await _showContextMenu(
+              _overlayCompleter = _showContextMenu(
                 context,
                 details.globalPosition,
                 _children,
                 widget.direction,
               );
-              widget.onDismissed?.call();
+              _overlayCompleter?.future.then((value) {
+                widget.onDismissed?.call();
+              });
             },
       onLongPressStart: enableLongPress && widget.enabled && !widget.enablePress
           ? (details) async {
-              await _showContextMenu(
+              _overlayCompleter = _showContextMenu(
                 context,
                 details.globalPosition,
                 _children,
                 widget.direction,
               );
-              widget.onDismissed?.call();
+              _overlayCompleter?.future.then((value) {
+                widget.onDismissed?.call();
+              });
             }
           : null,
       onTapUp: widget.enablePress && widget.enabled
           ? (details) async {
-              await _showContextMenu(
+              _overlayCompleter = _showContextMenu(
                 context,
                 details.globalPosition,
                 _children,
                 widget.direction,
               );
-              widget.onDismissed?.call();
+              _overlayCompleter?.future.then((value) {
+                widget.onDismissed?.call();
+              });
             }
           : null,
       child: widget.child,
@@ -510,64 +519,60 @@ class _ContextMenuState extends State<ContextMenu> {
   }
 }
 
-Future<void> _showContextMenu(
+OverlayCompleter<T?> _showContextMenu<T>(
   BuildContext context,
   Offset position,
   ValueListenable<List<MenuItem>> children,
   Axis direction,
-) async {
+) {
   final key = GlobalKey<OverlayHandlerStateMixin>();
   final theme = Theme.of(context);
   final overlayManager = OverlayManager.of(context);
-  return overlayManager
-      .showMenu(
-        key: key,
-        context: context,
-        position: position + const Offset(8, 0),
-        alignment: Alignment.topLeft,
-        anchorAlignment: Alignment.topRight,
-        regionGroupId: key,
-        modal: true,
-        follow: false,
-        consumeOutsideTaps: false,
-        dismissBackdropFocus: false,
-        overlayBarrier: OverlayBarrier(
-          borderRadius: BorderRadius.circular(theme.radiusMd),
-          barrierColor: const Color(0xB2000000),
-        ),
-        builder: (context) {
-          return AnimatedBuilder(
-              animation: children,
-              builder: (context, child) {
-                bool isSheetOverlay =
-                    SheetOverlayHandler.isSheetOverlay(context);
-                return ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minWidth: 192,
-                  ),
-                  child: MenuGroup(
-                    itemPadding: isSheetOverlay
-                        ? const EdgeInsets.symmetric(horizontal: 8) *
-                            theme.scaling
-                        : EdgeInsets.zero,
-                    direction: direction,
-                    regionGroupId: key,
-                    subMenuOffset: const Offset(8, -4),
-                    onDismissed: () {
-                      closeOverlay(context);
-                    },
-                    builder: (context, children) {
-                      return MenuPopup(
-                        children: children,
-                      );
-                    },
-                    children: children.value,
-                  ),
-                );
-              });
-        },
-      )
-      .future;
+  return overlayManager.showMenu(
+    key: key,
+    context: context,
+    position: position + const Offset(8, 0),
+    alignment: Alignment.topLeft,
+    anchorAlignment: Alignment.topRight,
+    regionGroupId: key,
+    modal: true,
+    follow: false,
+    consumeOutsideTaps: false,
+    dismissBackdropFocus: false,
+    overlayBarrier: OverlayBarrier(
+      borderRadius: BorderRadius.circular(theme.radiusMd),
+      barrierColor: const Color(0xB2000000),
+    ),
+    builder: (context) {
+      return AnimatedBuilder(
+          animation: children,
+          builder: (context, child) {
+            bool isSheetOverlay = SheetOverlayHandler.isSheetOverlay(context);
+            return ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: 192,
+              ),
+              child: MenuGroup(
+                itemPadding: isSheetOverlay
+                    ? const EdgeInsets.symmetric(horizontal: 8) * theme.scaling
+                    : EdgeInsets.zero,
+                direction: direction,
+                regionGroupId: key,
+                subMenuOffset: const Offset(8, -4),
+                onDismissed: () {
+                  closeOverlay(context);
+                },
+                builder: (context, children) {
+                  return MenuPopup(
+                    children: children,
+                  );
+                },
+                children: children.value,
+              ),
+            );
+          });
+    },
+  );
 }
 
 class ContextMenuPopup extends StatelessWidget {
