@@ -37,20 +37,12 @@ class Card extends StatelessWidget {
     return OutlinedContainer(
       clipBehavior: clipBehavior,
       borderRadius: borderRadius,
-      borderWidth: borderWidth,
+      borderWidth: 1,
       borderColor: borderColor,
       backgroundColor: filled
           ? fillColor ?? theme.colorScheme.border
           : theme.colorScheme.card,
-      boxShadow: boxShadow ??
-          [
-            const BoxShadow(
-              color: Color(0x0D000000),
-              offset: Offset(0, 1),
-              blurRadius: 2.0,
-              spreadRadius: 0.0,
-            )
-          ],
+      boxShadow: [],
       padding: padding ?? (EdgeInsets.all(16 * scaling)),
       surfaceOpacity: surfaceOpacity,
       surfaceBlur: surfaceBlur,
@@ -123,4 +115,3 @@ class SurfaceCard extends StatelessWidget {
     );
   }
 }
-
