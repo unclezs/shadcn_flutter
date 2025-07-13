@@ -1376,6 +1376,107 @@ class MiniColorPickerSet extends StatefulWidget {
 
 class _MiniColorPickerSetState extends State<MiniColorPickerSet> {
   ColorDerivative get color => widget.color;
+  final TextEditingController _hexController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    ColorDerivative color = widget.color;
+    var rgbColor = color.toColor();
+    if (widget.showAlpha) {
+      _hexController.text = '#${rgbColor.toARGB32().toRadixString(16)}';
+    } else {
+      _hexController.text =
+          '#${rgbColor.toARGB32().toRadixString(16).substring(2)}';
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant MiniColorPickerSet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.color != widget.color) {
+      ColorDerivative color = widget.color;
+      var rgbColor = color.toColor();
+      if (widget.showAlpha) {
+        _hexController.text = '#${rgbColor.toARGB32().toRadixString(16)}';
+      } else {
+        _hexController.text =
+            '#${rgbColor.toARGB32().toRadixString(16).substring(2)}';
+      }
+    }
+  }
+
+  void _parseHexInput() {
+    var hex = _hexController.text;
+    if (hex.startsWith('#')) {
+      hex = hex.substring(1);
+    }
+    Color color;
+    try {
+      if (hex.length == 6) {
+        color = Color(int.parse('FF$hex', radix: 16));
+      } else if (hex.length == 8) {
+        color = Color(int.parse(hex, radix: 16));
+      } else {
+        return; // Don't update for incomplete input
+      }
+      final derivative = ColorDerivative.fromColor(color);
+      widget.onColorChanged?.call(derivative);
+      widget.onColorChangeEnd?.call(derivative);
+    } catch (e) {
+      // Don't revert on typing, only on final submission
+    }
+  }
+
+  void _validateAndParseHex() {
+    var hex = _hexController.text;
+    if (hex.startsWith('#')) {
+      hex = hex.substring(1);
+    }
+    Color color;
+    try {
+      if (hex.length == 6) {
+        color = Color(int.parse('FF$hex', radix: 16));
+      } else if (hex.length == 8) {
+        color = Color(int.parse(hex, radix: 16));
+      } else {
+        // Revert to current color for invalid length on submission
+        color = widget.color.toColor();
+        if (widget.showAlpha) {
+          _hexController.text = '#${color.toARGB32().toRadixString(16)}';
+        } else {
+          _hexController.text =
+              '#${color.toARGB32().toRadixString(16).substring(2)}';
+        }
+        return;
+      }
+      final derivative = ColorDerivative.fromColor(color);
+      widget.onColorChanged?.call(derivative);
+      widget.onColorChangeEnd?.call(derivative);
+    } catch (e) {
+      // If parsing fails, revert to current color
+      final color = widget.color.toColor();
+      if (widget.showAlpha) {
+        _hexController.text = '#${color.toARGB32().toRadixString(16)}';
+      } else {
+        _hexController.text =
+            '#${color.toARGB32().toRadixString(16).substring(2)}';
+      }
+    }
+  }
+
+  bool _isValidHexChar(String char) {
+    return RegExp(r'^[0-9a-fA-F]$').hasMatch(char);
+  }
+
+  bool _isValidHexInput(String hex) {
+    if (hex.startsWith('#')) {
+      hex = hex.substring(1);
+    }
+    if (hex.isEmpty) return true; // Allow empty for typing
+    if (hex.length > 8) return false; // Too long
+    return hex.split('').every(_isValidHexChar);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1535,6 +1636,22 @@ class _MiniColorPickerSetState extends State<MiniColorPickerSet> {
                       ),
               ),
             ),
+          Gap(theme.scaling * 16),
+          TextField(
+            controller: _hexController,
+            onChanged: (value) {
+              // Only parse if it's valid input
+              if (_isValidHexInput(value)) {
+                _parseHexInput();
+              }
+            },
+            onEditingComplete: () {
+              _validateAndParseHex();
+            },
+            onSubmitted: (_) {
+              _validateAndParseHex();
+            },
+          ),
           if (widget.onPickFromScreen != null) Gap(theme.scaling * 16),
           if (widget.onPickFromScreen != null)
             IconButton.outline(
