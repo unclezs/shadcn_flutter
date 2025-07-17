@@ -1486,6 +1486,22 @@ class _MiniColorPickerSetState extends State<MiniColorPickerSet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          TextField(
+            controller: _hexController,
+            onChanged: (value) {
+              // Only parse if it's valid input
+              if (_isValidHexInput(value)) {
+                _parseHexInput();
+              }
+            },
+            onEditingComplete: () {
+              _validateAndParseHex();
+            },
+            onSubmitted: (_) {
+              _validateAndParseHex();
+            },
+          ),
+          Gap(theme.scaling * 16),
           AspectRatio(
             aspectRatio: 1,
             child: Container(
@@ -1636,22 +1652,6 @@ class _MiniColorPickerSetState extends State<MiniColorPickerSet> {
                       ),
               ),
             ),
-          Gap(theme.scaling * 16),
-          TextField(
-            controller: _hexController,
-            onChanged: (value) {
-              // Only parse if it's valid input
-              if (_isValidHexInput(value)) {
-                _parseHexInput();
-              }
-            },
-            onEditingComplete: () {
-              _validateAndParseHex();
-            },
-            onSubmitted: (_) {
-              _validateAndParseHex();
-            },
-          ),
           if (widget.onPickFromScreen != null) Gap(theme.scaling * 16),
           if (widget.onPickFromScreen != null)
             IconButton.outline(
