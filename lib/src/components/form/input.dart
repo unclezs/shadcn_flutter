@@ -198,6 +198,7 @@ class InputClearFeature extends InputFeature {
 class _InputClearFeatureState extends InputFeatureState<InputClearFeature> {
   void _clear() {
     controller.text = '';
+    input.onChanged?.call('');
   }
 
   @override
