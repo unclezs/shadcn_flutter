@@ -84,7 +84,7 @@ class TextArea extends StatefulWidget {
     this.onTapOutside,
     this.inputFormatters,
     this.style,
-    this.contextMenuBuilder,
+    this.contextMenuBuilder = buildEditableTextContextMenu,
     this.keyboardType,
     this.textInputAction,
     this.clipBehavior = Clip.hardEdge,
