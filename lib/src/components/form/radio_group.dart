@@ -185,6 +185,9 @@ class RadioCardTheme {
   /// The default color to use.
   final Color? color;
 
+  /// The color to use when the radio card is selected.
+  final Color? selectedColor;
+
   /// The width of the border of the radio card.
   final double? borderWidth;
 
@@ -209,6 +212,7 @@ class RadioCardTheme {
     this.disabledCursor,
     this.hoverColor,
     this.color,
+    this.selectedColor,
     this.borderWidth,
     this.selectedBorderWidth,
     this.borderRadius,
@@ -225,6 +229,7 @@ class RadioCardTheme {
   /// Creates a copy of this [RadioCardTheme] but with the given fields replaced with the new values.
   RadioCardTheme copyWith({
     ValueGetter<MouseCursor?>? enabledCursor,
+    ValueGetter<Color?>? selectedColor,
     ValueGetter<MouseCursor?>? disabledCursor,
     ValueGetter<Color?>? hoverColor,
     ValueGetter<Color?>? color,
@@ -242,6 +247,8 @@ class RadioCardTheme {
           disabledCursor != null ? disabledCursor() : this.disabledCursor,
       hoverColor: hoverColor != null ? hoverColor() : this.hoverColor,
       color: color != null ? color() : this.color,
+      selectedColor:
+          selectedColor != null ? selectedColor() : this.selectedColor,
       borderWidth: borderWidth != null ? borderWidth() : this.borderWidth,
       selectedBorderWidth: selectedBorderWidth != null
           ? selectedBorderWidth()
@@ -264,6 +271,7 @@ class RadioCardTheme {
         other.disabledCursor == disabledCursor &&
         other.hoverColor == hoverColor &&
         other.color == color &&
+        other.selectedColor == selectedColor &&
         other.borderWidth == borderWidth &&
         other.selectedBorderWidth == selectedBorderWidth &&
         other.borderRadius == borderRadius &&
@@ -374,15 +382,22 @@ class _RadioCardState<T> extends State<RadioCard<T>> {
               padding: EdgeInsets.zero,
               clipBehavior: Clip.antiAlias,
               duration: kDefaultDuration,
+              filled: true,
               fillColor: _hovering
                   ? styleValue(
                       defaultValue: theme.colorScheme.muted,
-                      themeValue: componentTheme?.hoverColor,
+                      themeValue: componentTheme?.selectedColor ??
+                          componentTheme?.hoverColor,
                     )
-                  : styleValue(
-                      defaultValue: theme.colorScheme.background,
-                      themeValue: componentTheme?.color,
-                    ),
+                  : groupData?.selectedItem == widget.value
+                      ? styleValue(
+                          defaultValue: theme.colorScheme.background,
+                          themeValue: componentTheme?.selectedColor,
+                        )
+                      : styleValue(
+                          defaultValue: theme.colorScheme.background,
+                          themeValue: componentTheme?.color,
+                        ),
               child: Container(
                 padding: styleValue(
                   defaultValue: EdgeInsets.all(0 * theme.scaling),

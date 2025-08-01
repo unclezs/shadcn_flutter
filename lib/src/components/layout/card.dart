@@ -37,7 +37,7 @@ class Card extends StatelessWidget {
     return OutlinedContainer(
       clipBehavior: clipBehavior,
       borderRadius: borderRadius,
-      borderWidth: 1,
+      borderWidth: borderColor == Colors.black ? borderWidth : 1,
       borderColor: borderColor,
       backgroundColor: filled
           ? fillColor ?? theme.colorScheme.border

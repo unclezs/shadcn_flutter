@@ -6,6 +6,7 @@ class Tabs extends StatelessWidget {
   final List<TabChild> children;
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
+  final Border? border;
 
   const Tabs({
     super.key,
@@ -14,6 +15,7 @@ class Tabs extends StatelessWidget {
     required this.children,
     this.padding,
     this.borderRadius,
+    this.border,
   });
 
   Widget _childBuilder(
@@ -44,7 +46,7 @@ class Tabs extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               theme.radiusMd,
             ),
-            boxShadow: i == index
+            boxShadow: (i == index && border == null)
                 ? [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.1),
@@ -54,6 +56,7 @@ class Tabs extends StatelessWidget {
                     )
                   ]
                 : null,
+            border: i == index ? border : null,
           ),
           child: (i == index ? child.foreground() : child.muted())
               .small()
@@ -77,6 +80,7 @@ class Tabs extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               borderRadius ?? theme.radiusLg,
             ),
+            border: border,
           ),
           padding: const EdgeInsets.all(4) * scaling,
           child: IntrinsicHeight(

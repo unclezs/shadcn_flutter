@@ -2168,7 +2168,7 @@ Decoration _buttonCardDecoration(
   if (states.contains(WidgetState.hovered) ||
       states.contains(WidgetState.selected)) {
     return BoxDecoration(
-      color: themeData.colorScheme.border,
+      color: themeData.colorScheme.muted,
       borderRadius: BorderRadius.circular(themeData.radiusXl),
       border: Border.all(
         color: themeData.colorScheme.border,
