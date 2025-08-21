@@ -1504,7 +1504,8 @@ class TextFieldState extends State<TextField>
     }
 
     // On iOS, we don't show handles when the selection is collapsed.
-    if (effectiveController.selection.isCollapsed) {
+    if (defaultTargetPlatform == TargetPlatform.iOS &&
+        effectiveController.selection.isCollapsed) {
       return false;
     }
 
@@ -1865,6 +1866,7 @@ class TextFieldState extends State<TextField>
       case TargetPlatform.iOS:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
+        textSelectionControls ??= cupertino.cupertinoTextSelectionHandleControls;
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
@@ -1936,7 +1938,7 @@ class TextFieldState extends State<TextField>
     final Color selectionColor =
         DefaultSelectionStyle.of(context).selectionColor ??
             theme.colorScheme.primary.withValues(
-              alpha: 0.2,
+              alpha: 0.4,
             );
 
     // Set configuration as disabled if not otherwise specified. If specified,
@@ -2112,11 +2114,20 @@ class TextFieldState extends State<TextField>
     for (final attached in _attachedFeatures) {
       textField = attached.state.wrap(textField);
     }
-    return WidgetStatesProvider(
-      states: {
-        if (_effectiveFocusNode.hasFocus) WidgetState.hovered,
-      },
-      child: textField,
+    return DefaultSelectionStyle(
+      cursorColor: cursorColor,
+      selectionColor: selectionColor,
+      child: cupertino.CupertinoTheme(
+        data: cupertino.CupertinoTheme.of(context).copyWith(
+          primaryColor: cursorColor,
+        ),
+        child: WidgetStatesProvider(
+          states: {
+            if (_effectiveFocusNode.hasFocus) WidgetState.hovered,
+          },
+          child: textField,
+        ),
+      ),
     );
   }
 
