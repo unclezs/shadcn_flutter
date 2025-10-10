@@ -1239,6 +1239,9 @@ class _ColorPickerSetState extends State<ColorPickerSet> {
                 Gap(theme.scaling * 16),
                 TextField(
                   controller: _hexController,
+                  onSubmitted: (_) => () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
                   onEditingComplete: () {
                     var hex = _hexController.text;
                     if (hex.startsWith('#')) {
@@ -1488,18 +1491,15 @@ class _MiniColorPickerSetState extends State<MiniColorPickerSet> {
         children: [
           TextField(
             controller: _hexController,
-            onChanged: (value) {
-              // Only parse if it's valid input
-              if (_isValidHexInput(value)) {
-                _parseHexInput();
-              }
-            },
-            onEditingComplete: () {
-              _validateAndParseHex();
-            },
             onSubmitted: (_) {
+              FocusScope.of(context).unfocus();
               _validateAndParseHex();
             },
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+              _validateAndParseHex();
+            },
+            textInputAction: TextInputAction.done,
           ),
           Gap(theme.scaling * 16),
           AspectRatio(
