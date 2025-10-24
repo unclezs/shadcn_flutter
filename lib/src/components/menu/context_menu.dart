@@ -306,7 +306,7 @@ class MobileEditableTextContextMenu extends StatelessWidget {
 
     var primaryAnchor = (editableTextState.contextMenuAnchors.secondaryAnchor ??
             editableTextState.contextMenuAnchors.primaryAnchor) +
-        const Offset(-8, 8) * scaling;
+        const Offset(-8, -60) * scaling;
     if (undoHistoryController == null) {
       List<List<MenuItem>> categories = [
         if (modificationCategory.isNotEmpty) modificationCategory,
