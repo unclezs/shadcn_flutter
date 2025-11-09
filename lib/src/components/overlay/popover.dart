@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -46,7 +47,7 @@ class PopoverOverlayHandler extends OverlayHandler {
     final data = Data.capture(from: context, to: overlay.context);
 
     Size? anchorSize;
-    if (position == null) { 
+    if (position == null) {
       RenderBox renderBox = context.findRenderObject() as RenderBox;
       Offset pos = renderBox.localToGlobal(Offset.zero);
       anchorSize ??= renderBox.size;
@@ -65,6 +66,7 @@ class PopoverOverlayHandler extends OverlayHandler {
     ValueNotifier<bool> isClosed = ValueNotifier(false);
     OverlayEntry? barrierEntry;
     late OverlayEntry overlayEntry;
+    final ts = DateTime.now().millisecondsSinceEpoch;
     if (modal) {
       if (consumeOutsideTaps) {
         barrierEntry = OverlayEntry(
@@ -72,6 +74,10 @@ class PopoverOverlayHandler extends OverlayHandler {
             return GestureDetector(
               onTap: () {
                 if (!barrierDismissable || isClosed.value) return;
+                final now = DateTime.now().millisecondsSinceEpoch;
+                if (now - ts < 500 && Platform.isIOS) {
+                  return;
+                }
                 isClosed.value = true;
                 completer.complete();
               },
@@ -85,6 +91,10 @@ class PopoverOverlayHandler extends OverlayHandler {
               behavior: HitTestBehavior.translucent,
               onPointerDown: (event) {
                 if (!barrierDismissable || isClosed.value) return;
+                final now = DateTime.now().millisecondsSinceEpoch;
+                if (now - ts < 500 && Platform.isIOS) {
+                  return;
+                }
                 isClosed.value = true;
                 completer.complete();
               },
