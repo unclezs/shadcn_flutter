@@ -3,6 +3,9 @@ import '../../shadcn_flutter.dart';
 class Typography {
   final TextStyle sans;
   final TextStyle mono;
+  final TextStyle x4Small;
+  final TextStyle x3Small;
+  final TextStyle x2Small;
   final TextStyle xSmall;
   final TextStyle small;
   final TextStyle base;
@@ -41,6 +44,9 @@ class Typography {
   const Typography.geist({
     this.sans = const TextStyle(),
     this.mono = const TextStyle(),
+    this.x4Small = const TextStyle(fontSize: 6),
+    this.x3Small = const TextStyle(fontSize: 8),
+    this.x2Small = const TextStyle(fontSize: 10),
     this.xSmall = const TextStyle(fontSize: 12),
     this.small = const TextStyle(fontSize: 14),
     this.base = const TextStyle(fontSize: 16),
@@ -82,6 +88,9 @@ class Typography {
   const Typography({
     required this.sans,
     required this.mono,
+    required this.x4Small,
+    required this.x3Small,
+    required this.x2Small,
     required this.xSmall,
     required this.small,
     required this.base,
@@ -121,6 +130,9 @@ class Typography {
   Typography copyWith({
     TextStyle? sans,
     TextStyle? mono,
+    TextStyle? x4Small,
+    TextStyle? x3Small,
+    TextStyle? x2Small,
     TextStyle? xSmall,
     TextStyle? small,
     TextStyle? base,
@@ -159,6 +171,9 @@ class Typography {
     return Typography(
       sans: sans ?? this.sans,
       mono: mono ?? this.mono,
+      x4Small: x4Small ?? this.x4Small,
+      x3Small: x3Small ?? this.x3Small,
+      x2Small: x2Small ?? this.x2Small,
       xSmall: xSmall ?? this.xSmall,
       small: small ?? this.small,
       base: base ?? this.base,
@@ -204,6 +219,15 @@ class Typography {
       mono: mono.fontSize == null
           ? mono
           : mono.copyWith(fontSize: mono.fontSize! * factor),
+      x4Small: x4Small.fontSize == null
+          ? x4Small
+          : x4Small.copyWith(fontSize: x4Small.fontSize! * factor),
+      x3Small: x3Small.fontSize == null
+          ? x3Small
+          : x3Small.copyWith(fontSize: x3Small.fontSize! * factor),
+      x2Small: x2Small.fontSize == null
+          ? x2Small
+          : x2Small.copyWith(fontSize: x2Small.fontSize! * factor),
       xSmall: xSmall.fontSize == null
           ? xSmall
           : xSmall.copyWith(fontSize: xSmall.fontSize! * factor),
@@ -311,6 +335,9 @@ class Typography {
     return Typography(
       sans: TextStyle.lerp(a.sans, b.sans, t)!,
       mono: TextStyle.lerp(a.mono, b.mono, t)!,
+      x4Small: TextStyle.lerp(a.x4Small, b.x4Small, t)!,
+      x3Small: TextStyle.lerp(a.x3Small, b.x3Small, t)!,
+      x2Small: TextStyle.lerp(a.x2Small, b.x2Small, t)!,
       xSmall: TextStyle.lerp(a.xSmall, b.xSmall, t)!,
       small: TextStyle.lerp(a.small, b.small, t)!,
       base: TextStyle.lerp(a.base, b.base, t)!,
@@ -354,6 +381,9 @@ class Typography {
       other is Typography &&
           sans == other.sans &&
           mono == other.mono &&
+          x4Small == other.x4Small &&
+          x3Small == other.x3Small &&
+          x2Small == other.x2Small &&
           xSmall == other.xSmall &&
           small == other.small &&
           base == other.base &&
@@ -393,6 +423,9 @@ class Typography {
   int get hashCode =>
       sans.hashCode ^
       mono.hashCode ^
+      x4Small.hashCode ^
+      x3Small.hashCode ^
+      x2Small.hashCode ^
       xSmall.hashCode ^
       small.hashCode ^
       base.hashCode ^
@@ -430,6 +463,6 @@ class Typography {
 
   @override
   String toString() {
-    return 'Typography(sans: $sans, mono: $mono, xSmall: $xSmall, small: $small, base: $base, large: $large, xLarge: $xLarge, x2Large: $x2Large, x3Large: $x3Large, x4Large: $x4Large, x5Large: $x5Large, x6Large: $x6Large, x7Large: $x7Large, x8Large: $x8Large, x9Large: $x9Large, thin: $thin, light: $light, extraLight: $extraLight, normal: $normal, medium: $medium, semiBold: $semiBold, bold: $bold, extraBold: $extraBold, black: $black, italic: $italic, h1: $h1, h2: $h2, h3: $h3, h4: $h4, p: $p, blockQuote: $blockQuote, inlineCode: $inlineCode, lead: $lead, textLarge: $textLarge, textSmall: $textSmall, textMuted: $textMuted)';
+    return 'Typography(sans: $sans, mono: $mono, x4Small: $x4Small, x3Small: $x3Small, x2Small: $x2Small, xSmall: $xSmall, small: $small, base: $base, large: $large, xLarge: $xLarge, x2Large: $x2Large, x3Large: $x3Large, x4Large: $x4Large, x5Large: $x5Large, x6Large: $x6Large, x7Large: $x7Large, x8Large: $x8Large, x9Large: $x9Large, thin: $thin, light: $light, extraLight: $extraLight, normal: $normal, medium: $medium, semiBold: $semiBold, bold: $bold, extraBold: $extraBold, black: $black, italic: $italic, h1: $h1, h2: $h2, h3: $h3, h4: $h4, p: $p, blockQuote: $blockQuote, inlineCode: $inlineCode, lead: $lead, textLarge: $textLarge, textSmall: $textSmall, textMuted: $textMuted)';
   }
 }

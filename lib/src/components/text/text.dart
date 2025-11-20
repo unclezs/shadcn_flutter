@@ -45,6 +45,21 @@ extension TextExtension on Widget {
         child: this,
       );
 
+  TextModifier get x4Small => WrappedText(
+        style: (context, theme) => theme.typography.x4Small,
+        child: this,
+      );
+
+  TextModifier get x3Small => WrappedText(
+        style: (context, theme) => theme.typography.x3Small,
+        child: this,
+      );
+
+  TextModifier get x2Small => WrappedText(
+        style: (context, theme) => theme.typography.x2Small,
+        child: this,
+      );
+
   TextModifier get xSmall => WrappedText(
         style: (context, theme) => theme.typography.xSmall,
         child: this,
