@@ -284,8 +284,12 @@ class _DrawerWrapperState extends State<DrawerWrapper>
           width: widget.dragHandleSize?.width ?? 6 * theme.scaling,
           height: widget.dragHandleSize?.height ?? 100 * theme.scaling,
           decoration: BoxDecoration(
-            color: theme.colorScheme.muted,
+            color: theme.colorScheme.isEink ? theme.colorScheme.foreground : theme.colorScheme.muted,
             borderRadius: theme.borderRadiusXxl,
+            border: theme.colorScheme.isEink ? Border.all(
+              color: theme.colorScheme.border,
+              width: 1,
+            ) : null,
           ),
         );
       case OverlayPosition.top:
@@ -294,8 +298,12 @@ class _DrawerWrapperState extends State<DrawerWrapper>
           width: widget.dragHandleSize?.width ?? 100 * theme.scaling,
           height: widget.dragHandleSize?.height ?? 6 * theme.scaling,
           decoration: BoxDecoration(
-            color: theme.colorScheme.muted,
+            color: theme.colorScheme.isEink ? theme.colorScheme.foreground : theme.colorScheme.muted,
             borderRadius: theme.borderRadiusXxl,
+            border: theme.colorScheme.isEink ? Border.all(
+              color: theme.colorScheme.border,
+              width: 1,
+            ) : null,
           ),
         );
       default:

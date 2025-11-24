@@ -692,6 +692,12 @@ class _SliderState extends State<Slider>
                 ? theme.colorScheme.primary.scaleAlpha(0.2)
                 : theme.colorScheme.muted,
             borderRadius: BorderRadius.circular(theme.radiusSm),
+            border: theme.colorScheme.isEink
+                ? Border.all(
+                    color: theme.colorScheme.border,
+                    width: 1,
+                  )
+                : null,
           ),
         ),
       ),

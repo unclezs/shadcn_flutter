@@ -71,6 +71,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 240.0, 0.059, 0.1).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 220.0, 0.13, 0.91).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 217.2, 0.912, 0.598).toColor(),
+      isEink: false,
     );
   }
 
@@ -115,6 +116,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 240.0, 0.048, 0.959).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.037, 0.159).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 217.2, 0.912, 0.598).toColor(),
+      isEink: false,
     );
   }
 
@@ -167,6 +169,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 240.0, 0.059, 0.1).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 220.0, 0.13, 0.91).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 217.2, 0.912, 0.598).toColor(),
+      isEink: false,
     );
   }
 
@@ -210,6 +213,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -259,6 +263,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -301,6 +306,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -352,6 +358,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -395,6 +402,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -444,6 +452,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -485,6 +494,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -534,6 +544,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -575,6 +586,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -625,6 +637,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -666,6 +679,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -715,6 +729,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -757,6 +772,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -807,6 +823,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -848,6 +865,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -900,6 +918,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 240.0, 0.059, 0.1).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 220.0, 0.13, 0.91).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 217.2, 0.912, 0.598).toColor(),
+      isEink: false,
     );
   }
 
@@ -943,6 +962,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -992,6 +1012,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -1034,6 +1055,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -1085,6 +1107,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 
@@ -1127,6 +1150,7 @@ class ColorSchemes {
           const HSLColor.fromAHSL(1, 0.0, 0.0, 0.98).toColor(),
       sidebarBorder: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.9).toColor(),
       sidebarRing: const HSLColor.fromAHSL(1, 240.0, 0.06, 0.1).toColor(),
+      isEink: false,
     );
   }
 

@@ -2311,17 +2311,29 @@ Decoration _buttonSecondaryDecoration(
     return BoxDecoration(
       color: themeData.colorScheme.primaryForeground,
       borderRadius: BorderRadius.circular(themeData.radiusMd),
+      border: themeData.colorScheme.isEink ? Border.all(
+        color: themeData.colorScheme.border,
+        width: 1,
+      ) : null,
     );
   }
   if (states.contains(WidgetState.hovered)) {
     return BoxDecoration(
       color: themeData.colorScheme.secondary.scaleAlpha(0.8),
       borderRadius: BorderRadius.circular(themeData.radiusMd),
+      border: themeData.colorScheme.isEink ? Border.all(
+        color: themeData.colorScheme.border,
+        width: 1,
+      ) : null,
     );
   }
   return BoxDecoration(
     color: themeData.colorScheme.secondary,
     borderRadius: BorderRadius.circular(themeData.radiusMd),
+    border: themeData.colorScheme.isEink ? Border.all(
+      color: themeData.colorScheme.border,
+      width: 1,
+    ) : null,
   );
 }
 
