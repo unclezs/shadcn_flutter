@@ -497,6 +497,7 @@ class SelectState<T> extends State<Select<T>>
   late FocusNode _focusNode;
   final PopoverController _popoverController = PopoverController();
   late ValueNotifier<T?> _valueNotifier;
+  ScrollPosition? _scrollPosition;
 
   @override
   void initState() {
@@ -504,6 +505,18 @@ class SelectState<T> extends State<Select<T>>
     _focusNode = widget.focusNode ?? FocusNode();
     _valueNotifier = ValueNotifier(widget.value);
     formValue = widget.value;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scrollPosition?.removeListener(_onScroll);
+    _scrollPosition = Scrollable.maybeOf(context)?.position;
+    _scrollPosition?.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    _popoverController.close();
   }
 
   @override
@@ -547,6 +560,7 @@ class SelectState<T> extends State<Select<T>>
 
   @override
   void dispose() {
+    _scrollPosition?.removeListener(_onScroll);
     _popoverController.dispose();
     super.dispose();
   }
