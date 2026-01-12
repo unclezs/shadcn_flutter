@@ -43,7 +43,7 @@ class Typography {
 
   const Typography.geist({
     this.sans = const TextStyle(),
-    this.mono = const TextStyle(),
+    this.mono = const TextStyle(fontFamily: 'monospace'),
     this.x4Small = const TextStyle(fontSize: 6),
     this.x3Small = const TextStyle(fontSize: 8),
     this.x2Small = const TextStyle(fontSize: 10),

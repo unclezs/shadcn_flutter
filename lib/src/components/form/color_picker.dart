@@ -27,16 +27,9 @@ class ControlledColorInput extends StatelessWidget
   final ColorInputController? controller;
 
   final bool showAlpha;
-  final AlignmentGeometry? popoverAlignment;
-  final AlignmentGeometry? popoverAnchorAlignment;
-  final EdgeInsetsGeometry? popoverPadding;
   final Widget? placeholder;
-  final PromptMode mode;
-  final ColorPickerMode pickerMode;
   final Widget? dialogTitle;
-  final bool allowPickFromScreen;
   final bool showLabel;
-  final ColorHistoryStorage? storage;
 
   const ControlledColorInput({
     super.key,
@@ -46,16 +39,9 @@ class ControlledColorInput extends StatelessWidget
     this.controller,
     this.enabled = true,
     this.showAlpha = true,
-    this.popoverAlignment,
-    this.popoverAnchorAlignment,
-    this.popoverPadding,
     this.placeholder,
-    this.mode = PromptMode.dialog,
-    this.pickerMode = ColorPickerMode.rgb,
     this.dialogTitle,
-    this.allowPickFromScreen = true,
     this.showLabel = true,
-    this.storage,
   });
 
   @override
@@ -70,16 +56,9 @@ class ControlledColorInput extends StatelessWidget
           color: data.value,
           onChanged: data.onChanged,
           showAlpha: showAlpha,
-          popoverAlignment: popoverAlignment,
-          popoverAnchorAlignment: popoverAnchorAlignment,
-          popoverPadding: popoverPadding,
           placeholder: placeholder,
-          mode: mode,
-          pickerMode: pickerMode,
           dialogTitle: dialogTitle,
-          allowPickFromScreen: allowPickFromScreen,
           showLabel: showLabel,
-          storage: storage,
         );
       },
     );
@@ -88,9 +67,9 @@ class ControlledColorInput extends StatelessWidget
 
 String colorToHex(Color color, [bool showAlpha = true]) {
   if (showAlpha) {
-    return '#${color.value.toRadixString(16)}';
+    return '#${color.toARGB32().toRadixString(16)}';
   } else {
-    return '#${color.value.toRadixString(16).substring(2)}';
+    return '#${color.toARGB32().toRadixString(16).substring(2)}';
   }
 }
 
@@ -740,150 +719,11 @@ class ColorPickingResult {
   }
 }
 
-class ColorInputSet extends StatefulWidget {
-  final ColorDerivative color;
-  final ValueChanged<ColorDerivative>? onChanged;
-  final ValueChanged<ColorDerivative>? onColorChangeEnd;
-  final bool showAlpha;
-  final ColorPickerMode mode;
-  final ValueChanged<ColorPickerMode>? onModeChanged;
-  final VoidCallback? onPickFromScreen;
-  final ColorHistoryStorage? storage;
-
-  const ColorInputSet({
-    super.key,
-    required this.color,
-    this.onChanged,
-    this.onColorChangeEnd,
-    this.showAlpha = true,
-    this.mode = ColorPickerMode.rgb,
-    this.onModeChanged,
-    this.onPickFromScreen,
-    this.storage,
-  });
-
-  @override
-  State<ColorInputSet> createState() => _ColorInputSetState();
-}
-
-class _ColorInputSetState extends State<ColorInputSet> {
-  int _tabIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    final localizations = ShadcnLocalizations.of(context);
-    final theme = Theme.of(context);
-    return LayoutBuilder(builder: (context, constraints) {
-      return IntrinsicWidth(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Tabs(
-                index: _tabIndex,
-                onChanged: (value) {
-                  setState(() {
-                    _tabIndex = value;
-                  });
-                },
-                children: [
-                  // Text(localizations.colorPickerTabRGB),
-                  // Text(localizations.colorPickerTabHSL),
-                  // Text(localizations.colorPickerTabHSV),
-                  // if (widget.storage != null)
-                  //   Text(localizations.colorPickerTabRecent),
-                  TabItem(
-                    child: Text(localizations.colorPickerTabRGB),
-                  ),
-                  TabItem(
-                    child: Text(localizations.colorPickerTabHSL),
-                  ),
-                  TabItem(
-                    child: Text(localizations.colorPickerTabHSV),
-                  ),
-                  if (widget.storage != null)
-                    TabItem(
-                      child: Text(localizations.colorPickerTabRecent),
-                    ),
-                ]),
-            Gap(theme.scaling * 16),
-            _buildContent(context, theme, constraints.maxWidth),
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _buildContent(BuildContext context, ThemeData theme, double width) {
-    switch (_tabIndex) {
-      case 0:
-        return _buildColorTab(context, ColorPickerMode.rgb, width);
-      case 1:
-        return _buildColorTab(context, ColorPickerMode.hsl, width);
-      case 2:
-        return _buildColorTab(context, ColorPickerMode.hsv, width);
-      case 3:
-      default:
-        return _buildRecentTab(context);
-    }
-  }
-
-  Widget _buildRecentTab(BuildContext context) {
-    if (widget.storage == null) {
-      return const SizedBox();
-    }
-    return ColorHistoryGrid(
-      selectedColor: widget.color.toColor(),
-      storage: widget.storage!,
-      onColorPicked: (value) {
-        var derivative = ColorDerivative.fromColor(value);
-        widget.onChanged?.call(derivative);
-        widget.onColorChangeEnd?.call(derivative);
-      },
-    );
-  }
-
-  Widget _buildColorTab(
-      BuildContext context, ColorPickerMode mode, double width) {
-    if (width < 500) {
-      return MiniColorPickerSet(
-        key: ValueKey(mode),
-        color: widget.color,
-        mode: mode,
-        onColorChanged: widget.onChanged,
-        onColorChangeEnd: (value) {
-          widget.onColorChangeEnd?.call(value);
-          if (widget.storage != null) {
-            widget.storage!.addHistory(value.toColor());
-          }
-        },
-        showAlpha: widget.showAlpha,
-        onPickFromScreen: widget.onPickFromScreen,
-      );
-    }
-    return ColorPickerSet(
-      key: ValueKey(mode),
-      color: widget.color,
-      mode: mode,
-      onColorChanged: widget.onChanged,
-      onColorChangeEnd: (value) {
-        widget.onColorChangeEnd?.call(value);
-        if (widget.storage != null) {
-          widget.storage!.addHistory(value.toColor());
-        }
-      },
-      showAlpha: widget.showAlpha,
-      onPickFromScreen: widget.onPickFromScreen,
-    );
-  }
-}
-
 class ColorPickerSet extends StatefulWidget {
   final ColorDerivative color;
   final ValueChanged<ColorDerivative>? onColorChanged;
   final ValueChanged<ColorDerivative>? onColorChangeEnd;
   final bool showAlpha;
-  final VoidCallback? onPickFromScreen;
-  final ColorPickerMode mode;
 
   const ColorPickerSet({
     super.key,
@@ -891,8 +731,6 @@ class ColorPickerSet extends StatefulWidget {
     this.onColorChanged,
     this.onColorChangeEnd,
     this.showAlpha = true,
-    this.mode = ColorPickerMode.rgb,
-    this.onPickFromScreen,
   });
 
   @override
@@ -902,649 +740,87 @@ class ColorPickerSet extends StatefulWidget {
 class _ColorPickerSetState extends State<ColorPickerSet> {
   ColorDerivative get color => widget.color;
   final TextEditingController _hexController = TextEditingController();
-  // Red or Hue
-  final TextEditingController _aController = TextEditingController();
-  // Green or Saturation
-  final TextEditingController _bController = TextEditingController();
-  // Blue or Value or Lightness
-  final TextEditingController _cController = TextEditingController();
-  final TextEditingController _alphaController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    ColorDerivative color = widget.color;
-    var rgbColor = color.toColor();
+    _updateControllers();
+  }
+
+  void _updateControllers() {
+    var rgbColor = widget.color.toColor();
     if (widget.showAlpha) {
       _hexController.text = '#${rgbColor.value.toRadixString(16)}';
     } else {
       _hexController.text = '#${rgbColor.value.toRadixString(16).substring(2)}';
-    }
-    switch (widget.mode) {
-      case ColorPickerMode.rgb:
-        _aController.text = rgbColor.red.toString();
-        _bController.text = rgbColor.green.toString();
-        _cController.text = rgbColor.blue.toString();
-        _alphaController.text = (color.opacity * 255).toInt().toString();
-        break;
-      case ColorPickerMode.hsl:
-        final hsl = color.toHSLColor();
-        _aController.text = hsl.hue.toInt().toString();
-        _bController.text = (hsl.saturation * 100).toInt().toString();
-        _cController.text = (hsl.lightness * 100).toInt().toString();
-        _alphaController.text = (color.opacity * 100).toInt().toString();
-        break;
-      case ColorPickerMode.hsv:
-        final hsv = color.toHSVColor();
-        _aController.text = hsv.hue.toInt().toString();
-        _bController.text = (hsv.saturation * 100).toInt().toString();
-        _cController.text = (hsv.value * 100).toInt().toString();
-        _alphaController.text = (color.opacity * 100).toInt().toString();
-        break;
     }
   }
 
   @override
   void didUpdateWidget(covariant ColorPickerSet oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.color != widget.color || oldWidget.mode != widget.mode) {
-      ColorDerivative color = widget.color;
-      var rgbColor = color.toColor();
-      if (widget.showAlpha) {
-        _hexController.text = '#${rgbColor.value.toRadixString(16)}';
-      } else {
-        _hexController.text =
-            '#${rgbColor.value.toRadixString(16).substring(2)}';
-      }
-      switch (widget.mode) {
-        case ColorPickerMode.rgb:
-          _aController.text = rgbColor.red.toString();
-          _bController.text = rgbColor.green.toString();
-          _cController.text = rgbColor.blue.toString();
-          _alphaController.text = (color.opacity * 255).toInt().toString();
-          break;
-        case ColorPickerMode.hsl:
-          final hsl = color.toHSLColor();
-          _aController.text = hsl.hue.toInt().toString();
-          _bController.text = (hsl.saturation * 100).toInt().toString();
-          _cController.text = (hsl.lightness * 100).toInt().toString();
-          _alphaController.text = (color.opacity * 100).toInt().toString();
-          break;
-        case ColorPickerMode.hsv:
-          final hsv = color.toHSVColor();
-          _aController.text = hsv.hue.toInt().toString();
-          _bController.text = (hsv.saturation * 100).toInt().toString();
-          _cController.text = (hsv.value * 100).toInt().toString();
-          _alphaController.text = (color.opacity * 100).toInt().toString();
-          break;
-      }
-    }
-  }
-
-  void _onColorChange() {
-    String a = _aController.text;
-    String b = _bController.text;
-    String c = _cController.text;
-    String alpha = _alphaController.text;
-    if (a.isEmpty || b.isEmpty || c.isEmpty) {
-      return;
-    }
-    if (widget.showAlpha && alpha.isEmpty) {
-      return;
-    }
-    double aValue = double.tryParse(a) ?? 0;
-    double bValue = double.tryParse(b) ?? 0;
-    double cValue = double.tryParse(c) ?? 0;
-    double alphaValue = double.tryParse(alpha) ?? 0;
-    switch (widget.mode) {
-      case ColorPickerMode.rgb:
-        widget.onColorChanged?.call(widget.color.changeToColor(Color.fromARGB(
-          alphaValue.round().clamp(0, 255),
-          aValue.round().clamp(0, 255),
-          bValue.round().clamp(0, 255),
-          cValue.round().clamp(0, 255),
-        )));
-        break;
-      case ColorPickerMode.hsl:
-        widget.onColorChanged?.call(widget.color.changeToHSL(
-          HSLColor.fromAHSL(
-            (alphaValue / 100).clamp(0, 1),
-            aValue.roundToDouble().clamp(0, 360),
-            (bValue / 100).clamp(0, 1),
-            (cValue / 100).clamp(0, 1),
-          ),
-        ));
-        break;
-      case ColorPickerMode.hsv:
-        widget.onColorChanged?.call(widget.color.changeToHSV(
-          HSVColor.fromAHSV(
-            (alphaValue / 100).clamp(0, 1),
-            aValue.roundToDouble().clamp(0, 360),
-            (bValue / 100).clamp(0, 1),
-            (cValue / 100).clamp(0, 1),
-          ),
-        ));
-        break;
-    }
-  }
-
-  Widget _wrapTextField({required Widget child}) {
-    final theme = Theme.of(context);
-    return SizedBox(
-      width: 54 * theme.scaling,
-      child: child,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final localizations = ShadcnLocalizations.of(context);
-    String aLabel;
-    String bLabel;
-    String cLabel;
-    switch (widget.mode) {
-      case ColorPickerMode.rgb:
-        aLabel = localizations.colorRed;
-        bLabel = localizations.colorGreen;
-        cLabel = localizations.colorBlue;
-        break;
-      case ColorPickerMode.hsl:
-        aLabel = localizations.colorHue;
-        bLabel = localizations.colorSaturation;
-        cLabel = localizations.colorLightness;
-        break;
-      case ColorPickerMode.hsv:
-        aLabel = localizations.colorHue;
-        bLabel = localizations.colorSaturation;
-        cLabel = localizations.colorValue;
-        break;
-    }
-    return IntrinsicHeight(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          IntrinsicWidth(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: theme.colorScheme.border,
-                        ),
-                        borderRadius: BorderRadius.circular(theme.radiusLg),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: widget.mode == ColorPickerMode.hsl
-                          ? HSLColorPickerArea(
-                              color: color.toHSLColor(),
-                              sliderType: HSLColorSliderType.satLum,
-                              reverse: true,
-                              onColorChanged: (value) {
-                                widget.onColorChanged?.call(widget.color
-                                    .changeToHSLSaturation(value.saturation)
-                                    .changeToHSLLightness(value.lightness));
-                              },
-                              onColorEnd: (value) {
-                                widget.onColorChangeEnd?.call(widget.color
-                                    .changeToHSLSaturation(value.saturation)
-                                    .changeToHSLLightness(value.lightness));
-                              },
-                            )
-                          : HSVColorPickerArea(
-                              color: color.toHSVColor(),
-                              onColorChanged: (value) {
-                                widget.onColorChanged?.call(widget.color
-                                    .changeToHSVValue(value.value)
-                                    .changeToHSVSaturation(value.saturation));
-                              },
-                              sliderType: HSVColorSliderType.satVal,
-                              reverse: true,
-                              onColorEnd: (value) {
-                                widget.onColorChangeEnd?.call(
-                                  widget.color
-                                      .changeToHSVValue(value.value)
-                                      .changeToHSVSaturation(value.saturation),
-                                );
-                              },
-                            ),
-                    ),
-                  ),
-                ),
-                if (widget.onPickFromScreen != null) Gap(theme.scaling * 16),
-                if (widget.onPickFromScreen != null)
-                  IconButton.outline(
-                    onPressed: widget.onPickFromScreen,
-                    icon: const Icon(LucideIcons.pipette),
-                  ),
-              ],
-            ),
-          ),
-          Gap(theme.scaling * 16),
-          IntrinsicWidth(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: theme.scaling * 32,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: theme.colorScheme.border,
-                      ),
-                      borderRadius: BorderRadius.circular(theme.radiusLg),
-                    ),
-                    child: widget.mode == ColorPickerMode.hsl
-                        ? HSLColorPickerArea(
-                            color: HSLColor.fromAHSL(
-                              color.opacity,
-                              color.hslHue,
-                              1,
-                              0.5,
-                            ),
-                            onColorEnd: (value) {
-                              widget.onColorChangeEnd?.call(
-                                  widget.color.changeToHSLHue(value.hue));
-                            },
-                            sliderType: HSLColorSliderType.hue,
-                            radius: Radius.circular(theme.radiusLg),
-                            reverse: true,
-                            onColorChanged: (value) {
-                              widget.onColorChanged?.call(
-                                  widget.color.changeToHSLHue(value.hue));
-                            },
-                          )
-                        : HSVColorPickerArea(
-                            color: HSVColor.fromAHSV(
-                              color.opacity,
-                              color.hsvHue,
-                              color.hsvSat,
-                              color.hsvVal,
-                            ),
-                            radius: Radius.circular(theme.radiusLg),
-                            onColorChanged: (value) {
-                              widget.onColorChanged?.call(
-                                  widget.color.changeToHSVHue(value.hue));
-                            },
-                            sliderType: HSVColorSliderType.hue,
-                            reverse: true,
-                            onColorEnd: (value) {
-                              widget.onColorChangeEnd?.call(
-                                  widget.color.changeToHSVHue(value.hue));
-                            },
-                          ),
-                  ),
-                ),
-                if (widget.showAlpha) Gap(theme.scaling * 16),
-                // alpha
-                if (widget.showAlpha)
-                  SizedBox(
-                    height: 32 * theme.scaling,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: theme.colorScheme.border,
-                        ),
-                        borderRadius: BorderRadius.circular(theme.radiusLg),
-                      ),
-                      child: widget.mode == ColorPickerMode.hsl
-                          ? HSLColorPickerArea(
-                              color: HSLColor.fromAHSL(
-                                color.opacity,
-                                color.hslHue,
-                                color.hslSat,
-                                color.hslVal,
-                              ),
-                              sliderType: HSLColorSliderType.alpha,
-                              reverse: true,
-                              radius: Radius.circular(theme.radiusLg),
-                              onColorChanged: (value) {
-                                widget.onColorChanged?.call(
-                                    widget.color.changeToAlpha(value.alpha));
-                              },
-                              onColorEnd: (value) {
-                                widget.onColorChangeEnd?.call(
-                                    widget.color.changeToAlpha(value.alpha));
-                              },
-                            )
-                          : HSVColorPickerArea(
-                              color: HSVColor.fromAHSV(
-                                color.opacity,
-                                color.hsvHue,
-                                color.hsvSat,
-                                color.hsvVal,
-                              ),
-                              onColorChanged: (value) {
-                                widget.onColorChanged?.call(
-                                    widget.color.changeToAlpha(value.alpha));
-                              },
-                              sliderType: HSVColorSliderType.alpha,
-                              radius: Radius.circular(theme.radiusLg),
-                              reverse: true,
-                              onColorEnd: (value) {
-                                widget.onColorChangeEnd?.call(
-                                  widget.color.changeToAlpha(value.alpha),
-                                );
-                              },
-                            ),
-                    ),
-                  ),
-                Gap(theme.scaling * 16),
-                TextField(
-                  controller: _hexController,
-                  onSubmitted: (_) => () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                  },
-                  onEditingComplete: () {
-                    var hex = _hexController.text;
-                    if (hex.startsWith('#')) {
-                      hex = hex.substring(1);
-                    }
-                    Color color;
-                    if (hex.length == 6) {
-                      color = Color(int.parse('FF$hex', radix: 16));
-                    } else if (hex.length == 8) {
-                      color = Color(int.parse(hex, radix: 16));
-                    } else {
-                      color = widget.color.toColor();
-                      if (widget.showAlpha) {
-                        _hexController.text =
-                            '#${color.value.toRadixString(16)}';
-                      } else {
-                        _hexController.text =
-                            '#${color.value.toRadixString(16).substring(2)}';
-                      }
-                    }
-                    widget.onColorChanged
-                        ?.call(ColorDerivative.fromColor(color));
-                  },
-                ),
-                Gap(theme.scaling * 16),
-                SizedBox(
-                  child: Row(
-                    children: [
-                      _wrapTextField(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(aLabel).muted().small(),
-                            Gap(theme.scaling * 4),
-                            TextField(
-                              controller: _aController,
-                              onEditingComplete: _onColorChange,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              keyboardType: TextInputType.number,
-                            ),
-                          ],
-                        ),
-                      ),
-                      _wrapTextField(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(bLabel).muted().small(),
-                            Gap(theme.scaling * 4),
-                            TextField(
-                              controller: _bController,
-                              onEditingComplete: _onColorChange,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              keyboardType: TextInputType.number,
-                            ),
-                          ],
-                        ),
-                      ),
-                      _wrapTextField(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(cLabel).muted().small(),
-                            Gap(theme.scaling * 4),
-                            TextField(
-                              controller: _cController,
-                              onEditingComplete: _onColorChange,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              keyboardType: TextInputType.number,
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (widget.showAlpha)
-                        _wrapTextField(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(localizations.colorAlpha).muted().small(),
-                              Gap(theme.scaling * 4),
-                              TextField(
-                                onEditingComplete: _onColorChange,
-                                controller: _alphaController,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                keyboardType: TextInputType.number,
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ).gap(theme.scaling * 16),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class MiniColorPickerSet extends StatefulWidget {
-  final ColorDerivative color;
-  final ValueChanged<ColorDerivative>? onColorChanged;
-  final ValueChanged<ColorDerivative>? onColorChangeEnd;
-  final bool showAlpha;
-  final VoidCallback? onPickFromScreen;
-  final ColorPickerMode mode;
-
-  const MiniColorPickerSet({
-    super.key,
-    required this.color,
-    this.onColorChanged,
-    this.onColorChangeEnd,
-    this.showAlpha = true,
-    this.mode = ColorPickerMode.rgb,
-    this.onPickFromScreen,
-  });
-
-  @override
-  State<MiniColorPickerSet> createState() => _MiniColorPickerSetState();
-}
-
-class _MiniColorPickerSetState extends State<MiniColorPickerSet> {
-  ColorDerivative get color => widget.color;
-  final TextEditingController _hexController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    ColorDerivative color = widget.color;
-    var rgbColor = color.toColor();
-    if (widget.showAlpha) {
-      _hexController.text = '#${rgbColor.toARGB32().toRadixString(16)}';
-    } else {
-      _hexController.text =
-          '#${rgbColor.toARGB32().toRadixString(16).substring(2)}';
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant MiniColorPickerSet oldWidget) {
-    super.didUpdateWidget(oldWidget);
     if (oldWidget.color != widget.color) {
-      ColorDerivative color = widget.color;
-      var rgbColor = color.toColor();
-      if (widget.showAlpha) {
-        _hexController.text = '#${rgbColor.toARGB32().toRadixString(16)}';
-      } else {
-        _hexController.text =
-            '#${rgbColor.toARGB32().toRadixString(16).substring(2)}';
-      }
+      _updateControllers();
     }
-  }
-
-  void _parseHexInput() {
-    var hex = _hexController.text;
-    if (hex.startsWith('#')) {
-      hex = hex.substring(1);
-    }
-    Color color;
-    try {
-      if (hex.length == 6) {
-        color = Color(int.parse('FF$hex', radix: 16));
-      } else if (hex.length == 8) {
-        color = Color(int.parse(hex, radix: 16));
-      } else {
-        return; // Don't update for incomplete input
-      }
-      final derivative = ColorDerivative.fromColor(color);
-      widget.onColorChanged?.call(derivative);
-      widget.onColorChangeEnd?.call(derivative);
-    } catch (e) {
-      // Don't revert on typing, only on final submission
-    }
-  }
-
-  void _validateAndParseHex() {
-    var hex = _hexController.text;
-    if (hex.startsWith('#')) {
-      hex = hex.substring(1);
-    }
-    Color color;
-    try {
-      if (hex.length == 6) {
-        color = Color(int.parse('FF$hex', radix: 16));
-      } else if (hex.length == 8) {
-        color = Color(int.parse(hex, radix: 16));
-      } else {
-        // Revert to current color for invalid length on submission
-        color = widget.color.toColor();
-        if (widget.showAlpha) {
-          _hexController.text = '#${color.toARGB32().toRadixString(16)}';
-        } else {
-          _hexController.text =
-              '#${color.toARGB32().toRadixString(16).substring(2)}';
-        }
-        return;
-      }
-      final derivative = ColorDerivative.fromColor(color);
-      widget.onColorChanged?.call(derivative);
-      widget.onColorChangeEnd?.call(derivative);
-    } catch (e) {
-      // If parsing fails, revert to current color
-      final color = widget.color.toColor();
-      if (widget.showAlpha) {
-        _hexController.text = '#${color.toARGB32().toRadixString(16)}';
-      } else {
-        _hexController.text =
-            '#${color.toARGB32().toRadixString(16).substring(2)}';
-      }
-    }
-  }
-
-  bool _isValidHexChar(String char) {
-    return RegExp(r'^[0-9a-fA-F]$').hasMatch(char);
-  }
-
-  bool _isValidHexInput(String hex) {
-    if (hex.startsWith('#')) {
-      hex = hex.substring(1);
-    }
-    if (hex.isEmpty) return true; // Allow empty for typing
-    if (hex.length > 8) return false; // Too long
-    return hex.split('').every(_isValidHexChar);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return IntrinsicWidth(
+    final screenSize = MediaQuery.of(context).size;
+    final width = (screenSize.width * 0.7).clamp(0.0, 400.0);
+    final height = (screenSize.height * 0.6).clamp(0.0, 500.0);
+    return SizedBox(
+      width: width,
+      height: height,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextField(
             controller: _hexController,
-            onSubmitted: (_) {
-              FocusScope.of(context).unfocus();
-              _validateAndParseHex();
+            style: theme.typography.mono,
+            onSubmitted: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+            onEditingComplete: () {
+              var hex = _hexController.text;
+              if (hex.startsWith('#')) hex = hex.substring(1);
+              Color color;
+              if (hex.length == 6) {
+                color = Color(int.parse('FF$hex', radix: 16));
+              } else if (hex.length == 8) {
+                color = Color(int.parse(hex, radix: 16));
+              } else {
+                color = widget.color.toColor();
+                if (widget.showAlpha) {
+                  _hexController.text = '#${color.value.toRadixString(16)}';
+                } else {
+                  _hexController.text =
+                      '#${color.value.toRadixString(16).substring(2)}';
+                }
+                return;
+              }
+              widget.onColorChanged?.call(ColorDerivative.fromColor(color));
             },
-            onTapOutside: (event) {
-              FocusScope.of(context).unfocus();
-              _validateAndParseHex();
-            },
-            textInputAction: TextInputAction.done,
           ),
           Gap(theme.scaling * 16),
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: theme.colorScheme.border,
-                ),
-                borderRadius: BorderRadius.circular(theme.radiusLg),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(theme.radiusLg),
+              child: HSVColorPickerArea(
+                color: color.toHSVColor(),
+                onColorChanged: (value) {
+                  widget.onColorChanged?.call(widget.color
+                      .changeToHSVValue(value.value)
+                      .changeToHSVSaturation(value.saturation));
+                },
+                sliderType: HSVColorSliderType.satVal,
+                reverse: true,
+                onColorEnd: (value) {
+                  widget.onColorChangeEnd?.call(widget.color
+                      .changeToHSVValue(value.value)
+                      .changeToHSVSaturation(value.saturation));
+                },
               ),
-              clipBehavior: Clip.antiAlias,
-              child: widget.mode == ColorPickerMode.hsl
-                  ? HSLColorPickerArea(
-                      color: color.toHSLColor(),
-                      sliderType: HSLColorSliderType.satLum,
-                      reverse: true,
-                      onColorChanged: (value) {
-                        widget.onColorChanged?.call(widget.color
-                            .changeToHSLSaturation(value.saturation)
-                            .changeToHSLLightness(value.lightness));
-                      },
-                      onColorEnd: (value) {
-                        widget.onColorChangeEnd?.call(widget.color
-                            .changeToHSLSaturation(value.saturation)
-                            .changeToHSLLightness(value.lightness));
-                      },
-                    )
-                  : HSVColorPickerArea(
-                      color: color.toHSVColor(),
-                      onColorChanged: (value) {
-                        widget.onColorChanged?.call(widget.color
-                            .changeToHSVValue(value.value)
-                            .changeToHSVSaturation(value.saturation));
-                      },
-                      sliderType: HSVColorSliderType.satVal,
-                      reverse: true,
-                      onColorEnd: (value) {
-                        widget.onColorChangeEnd?.call(
-                          widget.color
-                              .changeToHSVValue(value.value)
-                              .changeToHSVSaturation(value.saturation),
-                        );
-                      },
-                    ),
             ),
           ),
           Gap(theme.scaling * 16),
@@ -1552,111 +828,59 @@ class _MiniColorPickerSetState extends State<MiniColorPickerSet> {
             height: theme.scaling * 32,
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: theme.colorScheme.border,
-                ),
+                border: Border.all(color: theme.colorScheme.border),
                 borderRadius: BorderRadius.circular(theme.radiusLg),
               ),
-              child: widget.mode == ColorPickerMode.hsl
-                  ? HSLColorPickerArea(
-                      color: HSLColor.fromAHSL(
-                        color.opacity,
-                        color.hslHue,
-                        1,
-                        0.5,
-                      ),
-                      onColorEnd: (value) {
-                        widget.onColorChangeEnd
-                            ?.call(widget.color.changeToHSLHue(value.hue));
-                      },
-                      sliderType: HSLColorSliderType.hue,
-                      radius: Radius.circular(theme.radiusLg),
-                      reverse: true,
-                      onColorChanged: (value) {
-                        widget.onColorChanged
-                            ?.call(widget.color.changeToHSLHue(value.hue));
-                      },
-                    )
-                  : HSVColorPickerArea(
-                      color: HSVColor.fromAHSV(
-                        color.opacity,
-                        color.hsvHue,
-                        color.hsvSat,
-                        color.hsvVal,
-                      ),
-                      radius: Radius.circular(theme.radiusLg),
-                      onColorChanged: (value) {
-                        widget.onColorChanged
-                            ?.call(widget.color.changeToHSVHue(value.hue));
-                      },
-                      sliderType: HSVColorSliderType.hue,
-                      reverse: true,
-                      onColorEnd: (value) {
-                        widget.onColorChangeEnd
-                            ?.call(widget.color.changeToHSVHue(value.hue));
-                      },
-                    ),
+              child: HSVColorPickerArea(
+                color: HSVColor.fromAHSV(
+                  color.opacity,
+                  color.hsvHue,
+                  color.hsvSat,
+                  color.hsvVal,
+                ),
+                radius: Radius.circular(theme.radiusLg),
+                onColorChanged: (value) {
+                  widget.onColorChanged
+                      ?.call(widget.color.changeToHSVHue(value.hue));
+                },
+                sliderType: HSVColorSliderType.hue,
+                reverse: true,
+                onColorEnd: (value) {
+                  widget.onColorChangeEnd
+                      ?.call(widget.color.changeToHSVHue(value.hue));
+                },
+              ),
             ),
           ),
           if (widget.showAlpha) Gap(theme.scaling * 16),
-          // alpha
           if (widget.showAlpha)
             SizedBox(
               height: 32 * theme.scaling,
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: theme.colorScheme.border,
-                  ),
+                  border: Border.all(color: theme.colorScheme.border),
                   borderRadius: BorderRadius.circular(theme.radiusLg),
                 ),
-                child: widget.mode == ColorPickerMode.hsl
-                    ? HSLColorPickerArea(
-                        color: HSLColor.fromAHSL(
-                          color.opacity,
-                          color.hslHue,
-                          1,
-                          0.5,
-                        ),
-                        sliderType: HSLColorSliderType.alpha,
-                        reverse: true,
-                        radius: Radius.circular(theme.radiusLg),
-                        onColorChanged: (value) {
-                          widget.onColorChanged
-                              ?.call(widget.color.changeToAlpha(value.alpha));
-                        },
-                        onColorEnd: (value) {
-                          widget.onColorChangeEnd
-                              ?.call(widget.color.changeToAlpha(value.alpha));
-                        },
-                      )
-                    : HSVColorPickerArea(
-                        color: HSVColor.fromAHSV(
-                          color.opacity,
-                          color.hsvHue,
-                          color.hsvSat,
-                          color.hsvVal,
-                        ),
-                        onColorChanged: (value) {
-                          widget.onColorChanged
-                              ?.call(widget.color.changeToAlpha(value.alpha));
-                        },
-                        sliderType: HSVColorSliderType.alpha,
-                        radius: Radius.circular(theme.radiusLg),
-                        reverse: true,
-                        onColorEnd: (value) {
-                          widget.onColorChangeEnd?.call(
-                            widget.color.changeToAlpha(value.alpha),
-                          );
-                        },
-                      ),
+                child: HSVColorPickerArea(
+                  color: HSVColor.fromAHSV(
+                    color.opacity,
+                    color.hsvHue,
+                    color.hsvSat,
+                    color.hsvVal,
+                  ),
+                  onColorChanged: (value) {
+                    widget.onColorChanged
+                        ?.call(widget.color.changeToAlpha(value.alpha));
+                  },
+                  sliderType: HSVColorSliderType.alpha,
+                  radius: Radius.circular(theme.radiusLg),
+                  reverse: true,
+                  onColorEnd: (value) {
+                    widget.onColorChangeEnd
+                        ?.call(widget.color.changeToAlpha(value.alpha));
+                  },
+                ),
               ),
-            ),
-          if (widget.onPickFromScreen != null) Gap(theme.scaling * 16),
-          if (widget.onPickFromScreen != null)
-            IconButton.outline(
-              onPressed: widget.onPickFromScreen,
-              icon: const Icon(LucideIcons.pipette),
             ),
         ],
       ),
@@ -1668,32 +892,18 @@ class ColorInput extends StatelessWidget {
   final ColorDerivative color;
   final ValueChanged<ColorDerivative>? onChanged;
   final bool showAlpha;
-  final AlignmentGeometry? popoverAlignment;
-  final AlignmentGeometry? popoverAnchorAlignment;
-  final EdgeInsetsGeometry? popoverPadding;
   final Widget? placeholder;
-  final PromptMode mode;
-  final ColorPickerMode pickerMode;
   final Widget? dialogTitle;
-  final bool allowPickFromScreen;
   final bool showLabel;
-  final ColorHistoryStorage? storage;
   final bool? enabled;
   const ColorInput({
     super.key,
     required this.color,
     this.onChanged,
     this.showAlpha = true,
-    this.popoverAlignment,
-    this.popoverAnchorAlignment,
-    this.popoverPadding,
     this.placeholder,
-    this.mode = PromptMode.dialog,
-    this.pickerMode = ColorPickerMode.rgb,
     this.dialogTitle,
-    this.allowPickFromScreen = true,
     this.showLabel = false,
-    this.storage,
     this.enabled,
   });
 
@@ -1704,11 +914,8 @@ class ColorInput extends StatelessWidget {
     return ObjectFormField(
       enabled: enabled,
       dialogTitle: dialogTitle,
-      popoverAlignment: popoverAlignment,
-      popoverAnchorAlignment: popoverAnchorAlignment,
-      popoverPadding: popoverPadding,
       value: color,
-      mode: mode,
+      mode: PromptMode.dialog,
       placeholder: placeholder ?? Text(localizations.placeholderColorPicker),
       onChanged: (value) {
         if (value != null) {
@@ -1733,7 +940,16 @@ class ColorInput extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Flexible(child: Text(colorToHex(value.toColor(), showAlpha))),
+              Flexible(
+                child: Text(
+                  colorToHex(value.toColor(), showAlpha),
+                  style: const TextStyle(
+                    fontFamily: 'monospace',
+                    fontFamilyFallback: ['GeistMono'],
+                    package: 'shadcn_flutter',
+                  ),
+                ),
+              ),
               Gap(theme.scaling * 8),
               AspectRatio(
                 aspectRatio: 1,
@@ -1751,59 +967,24 @@ class ColorInput extends StatelessWidget {
           ),
         );
       },
-      dialogActions: (innerContext, handler) {
-        return [
-          if (allowPickFromScreen)
-            IconButton.outline(
-              icon: Icon(LucideIcons.pipette, size: 16 * theme.scaling),
-              onPressed: () async {
-                await handler.close();
-                if (!context.mounted) return;
-                final result = await pickColorFromScreen(context);
-                if (result != null) {
-                  storage?.addHistory(result);
-                }
-                handler.prompt(
-                    result != null ? ColorDerivative.fromColor(result) : null);
-              },
-            ),
-        ];
-      },
       editorBuilder: (innerContext, handler) {
         return ColorInputPopup(
           color: handler.value ?? color,
           onChanged: (value) {
             handler.value = value;
           },
-          storage: storage,
           showAlpha: showAlpha,
-          initialMode: pickerMode,
-          onPickFromScreen: allowPickFromScreen && mode == PromptMode.popover
-              ? () async {
-                  await handler.close();
-                  if (!context.mounted) return;
-                  final result = await pickColorFromScreen(context);
-                  if (result != null) {
-                    storage?.addHistory(result);
-                    handler.value = ColorDerivative.fromColor(result);
-                  }
-                  handler.prompt();
-                }
-              : null,
         );
       },
     );
   }
 }
 
-class ColorInputPopup extends StatefulWidget {
+class ColorInputPopup extends StatelessWidget {
   final ColorDerivative color;
   final ValueChanged<ColorDerivative>? onChanged;
   final ValueChanged<ColorDerivative>? onColorChangeEnd;
   final bool showAlpha;
-  final ColorPickerMode initialMode;
-  final VoidCallback? onPickFromScreen;
-  final ColorHistoryStorage? storage;
 
   const ColorInputPopup({
     super.key,
@@ -1811,39 +992,15 @@ class ColorInputPopup extends StatefulWidget {
     this.onChanged,
     this.onColorChangeEnd,
     this.showAlpha = true,
-    this.initialMode = ColorPickerMode.rgb,
-    this.onPickFromScreen,
-    this.storage,
   });
 
   @override
-  State<ColorInputPopup> createState() => _ColorInputPopupState();
-}
-
-class _ColorInputPopupState extends State<ColorInputPopup> {
-  late ColorPickerMode _mode;
-
-  @override
-  void initState() {
-    super.initState();
-    _mode = widget.initialMode;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ColorInputSet(
-      color: widget.color,
-      onChanged: widget.onChanged,
-      showAlpha: widget.showAlpha,
-      mode: _mode,
-      onModeChanged: (mode) {
-        setState(() {
-          _mode = mode;
-        });
-      },
-      onPickFromScreen: widget.onPickFromScreen,
-      onColorChangeEnd: widget.onColorChangeEnd,
-      storage: widget.storage,
+    return ColorPickerSet(
+      color: color,
+      onColorChanged: onChanged,
+      onColorChangeEnd: onColorChangeEnd,
+      showAlpha: showAlpha,
     );
   }
 }
@@ -1879,152 +1036,32 @@ Future<ColorDerivative> showColorPickerDialog({
   required ColorDerivative color,
   ValueChanged<ColorDerivative>? onColorChanged,
   Widget? title,
-  ColorPickerMode initialMode = ColorPickerMode.rgb,
   bool showAlpha = true,
-  bool allowPickFromScreen = true,
-  ColorHistoryStorage? historyStorage,
 }) async {
-  final GlobalKey<_ColorPickerDialogState> key = GlobalKey();
-  while (true) {
-    if (!context.mounted) {
-      return color;
-    }
-    final result = await showDialog<_ColorPickerDialogResult>(
-      context: context,
-      builder: (context) {
-        return _ColorPickerDialog(
-          key: key,
-          color: color,
-          onColorChanged: (color) {
-            onColorChanged?.call(color);
-            if (historyStorage != null) {
-              historyStorage.addHistory(color.toColor());
-            }
-          },
-          showAlpha: showAlpha,
-          initialMode: initialMode,
-          allowPickFromScreen: allowPickFromScreen,
-          title: title,
-        );
-      },
-    );
-    if (result == null) {
-      return color;
-    }
-    if (result.pickedFromScreen) {
-      if (key.currentState != null) {
-        final modalRoute = ModalRoute.of(key.currentContext!);
-        if (modalRoute != null) {
-          await modalRoute.completed;
-        }
-      }
-      if (!context.mounted) {
-        return color;
-      }
-      final picked = await pickColorFromScreen(context);
-      if (picked != null) {
-        color = color.changeToColor(picked);
-      }
-      continue;
-    }
-    if (result.color != null) {
-      return result.color!;
-    }
-    return color;
-  }
-}
-
-Future<ColorDerivative> showColorPicker({
-  required BuildContext context,
-  AlignmentGeometry alignment = AlignmentDirectional.topStart,
-  AlignmentGeometry anchorAlignment = AlignmentDirectional.bottomStart,
-  bool follow = true,
-  Offset? offset,
-  PopoverConstraint widthConstraint = PopoverConstraint.flexible,
-  PopoverConstraint heightConstraint = PopoverConstraint.flexible,
-  required ColorDerivative color,
-  ValueChanged<ColorDerivative>? onColorChanged,
-  bool showAlpha = true,
-  ColorPickerMode initialMode = ColorPickerMode.rgb,
-  bool allowPickFromScreen = true,
-  ValueChanged<ColorDerivative>? onColorChangeEnd,
-  ColorHistoryStorage? historyStorage,
-}) async {
-  while (true) {
-    if (!context.mounted) {
-      return color;
-    }
-    final completer = showPopover(
-      context: context,
-      alignment: alignment,
-      follow: true,
-      offset: offset,
-      anchorAlignment: anchorAlignment,
-      widthConstraint: widthConstraint,
-      heightConstraint: heightConstraint,
-      builder: (innerContext) {
-        return _ColorPickerPopup(
-          color: color,
-          onColorChanged: onColorChanged,
-          onColorChangeEnd: (value) {
-            onColorChangeEnd?.call(value);
-            if (historyStorage != null) {
-              historyStorage.addHistory(value.toColor());
-            }
-          },
-          showAlpha: showAlpha,
-          initialMode: initialMode,
-          allowPickFromScreen: allowPickFromScreen,
-        );
-      },
-    );
-    final result = await completer.future;
-    if (result == null) {
-      return color;
-    }
-    if (result.pickedFromScreen) {
-      await completer.animationFuture;
-      if (!context.mounted) {
-        return color;
-      }
-      final picked = await pickColorFromScreen(context);
-      if (picked != null) {
-        color = color.changeToColor(picked);
-        onColorChanged?.call(color);
-      }
-      continue;
-    }
-    if (result.barrierColor != null) {
-      return result.barrierColor!;
-    }
-  }
-}
-
-class _ColorPickerDialogResult {
-  final ColorDerivative? color;
-  final bool pickedFromScreen;
-
-  const _ColorPickerDialogResult({
-    this.color,
-    this.pickedFromScreen = false,
-  });
+  final result = await showDialog<ColorDerivative>(
+    context: context,
+    builder: (context) {
+      return _ColorPickerDialog(
+        color: color,
+        onColorChanged: onColorChanged,
+        showAlpha: showAlpha,
+        title: title,
+      );
+    },
+  );
+  return result ?? color;
 }
 
 class _ColorPickerDialog extends StatefulWidget {
   final ColorDerivative color;
   final ValueChanged<ColorDerivative>? onColorChanged;
   final bool showAlpha;
-  final ColorPickerMode initialMode;
-  final bool allowPickFromScreen;
   final Widget? title;
 
   const _ColorPickerDialog({
-    super.key,
     required this.color,
     this.onColorChanged,
     this.showAlpha = true,
-    this.initialMode = ColorPickerMode.rgb,
-    this.allowPickFromScreen = true,
     this.title,
   });
 
@@ -2033,42 +1070,29 @@ class _ColorPickerDialog extends StatefulWidget {
 }
 
 class _ColorPickerDialogState extends State<_ColorPickerDialog> {
-  late ColorPickerMode _mode;
   late ColorDerivative _color;
 
   @override
   void initState() {
     super.initState();
-    _mode = widget.initialMode;
     _color = widget.color;
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = ShadcnLocalizations.of(context);
-    final theme = Theme.of(context);
     return AlertDialog(
       title: widget.title,
-      content: ColorInputPopup(
+      content: ColorPickerSet(
         color: _color,
-        onChanged: (value) {
+        onColorChanged: (value) {
           setState(() {
             _color = value;
           });
         },
         showAlpha: widget.showAlpha,
-        initialMode: _mode,
       ),
       actions: [
-        if (widget.allowPickFromScreen)
-          IconButton.outline(
-            onPressed: () {
-              Navigator.of(context).pop(const _ColorPickerDialogResult(
-                pickedFromScreen: true,
-              ));
-            },
-            icon: Icon(LucideIcons.pipette, size: 16 * theme.scaling),
-          ),
         SecondaryButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -2078,73 +1102,11 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
         PrimaryButton(
           onPressed: () {
             widget.onColorChanged?.call(_color);
-            Navigator.of(context).pop(_ColorPickerDialogResult(
-              color: _color,
-            ));
+            Navigator.of(context).pop(_color);
           },
           child: Text(localizations.buttonOk, textAlign: TextAlign.center),
         ),
       ],
-    );
-  }
-}
-
-class _ColorPickerPopup extends StatefulWidget {
-  final ColorDerivative color;
-  final ValueChanged<ColorDerivative>? onColorChanged;
-  final ValueChanged<ColorDerivative>? onColorChangeEnd;
-  final bool showAlpha;
-  final ColorPickerMode initialMode;
-  final bool allowPickFromScreen;
-
-  const _ColorPickerPopup({
-    required this.color,
-    this.onColorChanged,
-    this.onColorChangeEnd,
-    this.showAlpha = true,
-    this.initialMode = ColorPickerMode.rgb,
-    this.allowPickFromScreen = true,
-  });
-
-  @override
-  State<_ColorPickerPopup> createState() => _ColorPickerPopupState();
-}
-
-class _ColorPickerPopupState extends State<_ColorPickerPopup> {
-  late ColorPickerMode _mode;
-  late ColorDerivative _color;
-
-  @override
-  void initState() {
-    super.initState();
-    _mode = widget.initialMode;
-    _color = widget.color;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ModalContainer(
-      child: ColorInputPopup(
-        color: _color,
-        onChanged: (value) {
-          setState(() {
-            _color = value;
-          });
-          widget.onColorChanged?.call(value);
-        },
-        showAlpha: widget.showAlpha,
-        initialMode: _mode,
-        onColorChangeEnd: widget.onColorChangeEnd,
-        onPickFromScreen: widget.allowPickFromScreen
-            ? () {
-                closeOverlay(
-                    context,
-                    const _ColorPickerDialogResult(
-                      pickedFromScreen: true,
-                    ));
-              }
-            : null,
-      ),
     );
   }
 }
