@@ -755,9 +755,32 @@ class _ColorPickerSetState extends State<ColorPickerSet> {
       _isEditing = true;
     } else {
       _isEditing = false;
-      // 失去焦点时同步最新颜色值
-      _updateControllers();
+      // 失去焦点时，先尝试应用用户输入的颜色
+      _applyHexInput();
     }
+  }
+
+  /// 尝试解析并应用输入框中的 hex 值
+  void _applyHexInput() {
+    var hex = _hexController.text;
+    if (hex.startsWith('#')) hex = hex.substring(1);
+    hex = hex.toLowerCase();
+    try {
+      Color? color;
+      if (hex.length == 6) {
+        color = Color(int.parse('FF$hex', radix: 16));
+      } else if (hex.length == 8) {
+        color = Color(int.parse(hex, radix: 16));
+      }
+      if (color != null) {
+        widget.onColorChanged?.call(ColorDerivative.fromColor(color));
+        return;
+      }
+    } catch (_) {
+      // 解析失败，恢复当前颜色
+    }
+    // 无效输入，恢复当前颜色
+    _updateControllers();
   }
 
   void _updateControllers() {
@@ -809,22 +832,8 @@ class _ColorPickerSetState extends State<ColorPickerSet> {
             style: theme.typography.mono,
             onSubmitted: (_) => _hexFocusNode.unfocus(),
             onEditingComplete: () {
-              var hex = _hexController.text;
-              if (hex.startsWith('#')) hex = hex.substring(1);
-              hex = hex.toLowerCase();
-              Color color;
-              if (hex.length == 6) {
-                color = Color(int.parse('FF$hex', radix: 16));
-              } else if (hex.length == 8) {
-                color = Color(int.parse(hex, radix: 16));
-              } else {
-                // 无效输入，恢复当前颜色
-                _isEditing = false;
-                _updateControllers();
-                return;
-              }
               _isEditing = false;
-              widget.onColorChanged?.call(ColorDerivative.fromColor(color));
+              _applyHexInput();
             },
           ),
           Gap(theme.scaling * 16),
