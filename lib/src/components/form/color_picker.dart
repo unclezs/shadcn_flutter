@@ -740,19 +740,37 @@ class ColorPickerSet extends StatefulWidget {
 class _ColorPickerSetState extends State<ColorPickerSet> {
   ColorDerivative get color => widget.color;
   final TextEditingController _hexController = TextEditingController();
+  final FocusNode _hexFocusNode = FocusNode();
+  bool _isEditing = false;
 
   @override
   void initState() {
     super.initState();
+    _hexFocusNode.addListener(_onFocusChange);
     _updateControllers();
   }
 
+  void _onFocusChange() {
+    if (_hexFocusNode.hasFocus) {
+      _isEditing = true;
+    } else {
+      _isEditing = false;
+      // 失去焦点时同步最新颜色值
+      _updateControllers();
+    }
+  }
+
   void _updateControllers() {
+    // 如果正在编辑，不要覆盖用户输入
+    if (_isEditing) return;
+    
     var rgbColor = widget.color.toColor();
     if (widget.showAlpha) {
-      _hexController.text = '#${rgbColor.value.toRadixString(16)}';
+      _hexController.text =
+          '#${rgbColor.toARGB32().toRadixString(16).padLeft(8, '0')}';
     } else {
-      _hexController.text = '#${rgbColor.value.toRadixString(16).substring(2)}';
+      _hexController.text =
+          '#${rgbColor.toARGB32().toRadixString(16).padLeft(8, '0').substring(2)}';
     }
   }
 
@@ -762,6 +780,14 @@ class _ColorPickerSetState extends State<ColorPickerSet> {
     if (oldWidget.color != widget.color) {
       _updateControllers();
     }
+  }
+
+  @override
+  void dispose() {
+    _hexFocusNode.removeListener(_onFocusChange);
+    _hexFocusNode.dispose();
+    _hexController.dispose();
+    super.dispose();
   }
 
   @override
@@ -779,26 +805,25 @@ class _ColorPickerSetState extends State<ColorPickerSet> {
         children: [
           TextField(
             controller: _hexController,
+            focusNode: _hexFocusNode,
             style: theme.typography.mono,
-            onSubmitted: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+            onSubmitted: (_) => _hexFocusNode.unfocus(),
             onEditingComplete: () {
               var hex = _hexController.text;
               if (hex.startsWith('#')) hex = hex.substring(1);
+              hex = hex.toLowerCase();
               Color color;
               if (hex.length == 6) {
                 color = Color(int.parse('FF$hex', radix: 16));
               } else if (hex.length == 8) {
                 color = Color(int.parse(hex, radix: 16));
               } else {
-                color = widget.color.toColor();
-                if (widget.showAlpha) {
-                  _hexController.text = '#${color.value.toRadixString(16)}';
-                } else {
-                  _hexController.text =
-                      '#${color.value.toRadixString(16).substring(2)}';
-                }
+                // 无效输入，恢复当前颜色
+                _isEditing = false;
+                _updateControllers();
                 return;
               }
+              _isEditing = false;
               widget.onColorChanged?.call(ColorDerivative.fromColor(color));
             },
           ),
