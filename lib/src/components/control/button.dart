@@ -1027,7 +1027,39 @@ class ButtonStyle implements AbstractButtonStyle {
     if (shape == ButtonShape.circle) {
       return _resolveCircleDecoration;
     }
+    if (density == ButtonDensity.compact) {
+      return _resolveCompactDecoration;
+    }
     return variance.decoration;
+  }
+
+  Decoration _resolveCompactDecoration(
+      BuildContext context, Set<WidgetState> states) {
+    var decoration = variance.decoration(context, states);
+    if (decoration is BoxDecoration) {
+      final theme = Theme.of(context);
+      final maxRadius = theme.radiusSm;
+      final borderRadius = decoration.borderRadius;
+      if (borderRadius != null) {
+        final clampedRadius = _clampBorderRadius(borderRadius, maxRadius);
+        return decoration.copyWith(borderRadius: clampedRadius);
+      }
+    }
+    return decoration;
+  }
+
+  BorderRadius _clampBorderRadius(
+      BorderRadiusGeometry borderRadius, double maxRadius) {
+    if (borderRadius is BorderRadius) {
+      return BorderRadius.only(
+        topLeft: Radius.circular(min(borderRadius.topLeft.x, maxRadius)),
+        topRight: Radius.circular(min(borderRadius.topRight.x, maxRadius)),
+        bottomLeft: Radius.circular(min(borderRadius.bottomLeft.x, maxRadius)),
+        bottomRight:
+            Radius.circular(min(borderRadius.bottomRight.x, maxRadius)),
+      );
+    }
+    return BorderRadius.circular(maxRadius);
   }
 
   Decoration _resolveCircleDecoration(
