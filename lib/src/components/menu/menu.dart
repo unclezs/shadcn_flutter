@@ -427,6 +427,22 @@ class _MenuButtonState extends State<MenuButton> {
                         borderRadius: BorderRadius.circular(theme.radiusMd),
                       );
                     },
+                    textStyle: (context, states, value) {
+                      if (menuData.popoverController.hasOpenPopover) {
+                        final theme = Theme.of(context);
+                        return value.copyWith(
+                            color: theme.colorScheme.accentForeground);
+                      }
+                      return value;
+                    },
+                    iconTheme: (context, states, value) {
+                      if (menuData.popoverController.hasOpenPopover) {
+                        final theme = Theme.of(context);
+                        return value.copyWith(
+                            color: theme.colorScheme.accentForeground);
+                      }
+                      return value;
+                    },
                   ),
                   trailing: menuBarData != null
                       ? widget.trailing
