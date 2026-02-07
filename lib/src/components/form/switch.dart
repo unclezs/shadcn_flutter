@@ -175,6 +175,12 @@ class _SwitchState extends State<Switch> with FormValueSupplier<bool, Switch> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(theme.radiusLg),
                             color: theme.colorScheme.background,
+                            border: theme.colorScheme.isEink
+                                ? Border.all(
+                                    color: theme.colorScheme.border,
+                                    width: 1,
+                                  )
+                                : null,
                           ),
                         ),
                       ),
