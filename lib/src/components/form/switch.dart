@@ -154,6 +154,12 @@ class _SwitchState extends State<Switch> with FormValueSupplier<bool, Switch> {
                   color: widget.value && _enabled
                       ? theme.colorScheme.primary
                       : theme.colorScheme.muted,
+                  border: theme.colorScheme.isEink
+                      ? Border.all(
+                          color: theme.colorScheme.border,
+                          width: 1,
+                        )
+                      : null,
                 ),
                 child: Stack(
                   children: [
