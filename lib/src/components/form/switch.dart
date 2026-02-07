@@ -174,7 +174,7 @@ class _SwitchState extends State<Switch> with FormValueSupplier<bool, Switch> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(theme.radiusLg),
-                            color: theme.colorScheme.isEink
+                            color: theme.colorScheme.isEink && !widget.value
                                 ? theme.colorScheme.foreground
                                 : theme.colorScheme.background,
                             border: theme.colorScheme.isEink
