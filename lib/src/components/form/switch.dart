@@ -151,9 +151,9 @@ class _SwitchState extends State<Switch> with FormValueSupplier<bool, Switch> {
                 padding: EdgeInsets.all(2 * scaling),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(theme.radiusXl),
-                  color: widget.value && _enabled
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.muted,
+                color: widget.value && _enabled
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.input,
                   border: theme.colorScheme.isEink
                       ? Border.all(
                           color: theme.colorScheme.border,
