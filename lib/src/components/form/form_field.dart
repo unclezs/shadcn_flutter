@@ -278,7 +278,8 @@ class _ObjectFormFieldDialogState<T> extends State<_ObjectFormFieldDialog<T>>
           PrimaryButton(
               child: Text(localizations.buttonSave),
               onPressed: () {
-                Navigator.of(context).pop(ObjectFormFieldDialogResult(_value));
+                Navigator.of(context)
+                    .pop(ObjectFormFieldDialogResult(_value));
               }),
         ],
       ),
