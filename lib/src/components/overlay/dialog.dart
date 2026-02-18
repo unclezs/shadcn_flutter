@@ -109,19 +109,28 @@ class ModalContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var fullScreenMode = Model.maybeOf<bool>(context, kFullScreenMode);
-    return SurfaceCard(
-      clipBehavior: clipBehavior,
-      borderRadius: fullScreenMode == true ? BorderRadius.zero : borderRadius,
-      borderWidth: fullScreenMode == true ? 0 : borderWidth,
-      borderColor: borderColor,
-      filled: filled,
-      fillColor: fillColor,
-      boxShadow: fullScreenMode == true ? const [] : boxShadow,
-      padding: padding,
-      surfaceOpacity: surfaceOpacity,
-      surfaceBlur: surfaceBlur,
-      duration: duration,
-      child: child,
+    final theme = Theme.of(context);
+    var resolvedBorderRadius =
+        fullScreenMode == true ? BorderRadius.zero : borderRadius;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.background,
+        borderRadius: resolvedBorderRadius,
+      ),
+      child: SurfaceCard(
+        clipBehavior: clipBehavior,
+        borderRadius: resolvedBorderRadius,
+        borderWidth: fullScreenMode == true ? 0 : borderWidth,
+        borderColor: borderColor,
+        filled: filled,
+        fillColor: fillColor,
+        boxShadow: fullScreenMode == true ? const [] : boxShadow,
+        padding: padding,
+        surfaceOpacity: surfaceOpacity,
+        surfaceBlur: surfaceBlur,
+        duration: duration,
+        child: child,
+      ),
     );
   }
 }

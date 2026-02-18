@@ -354,13 +354,19 @@ class _ObjectFormFieldPopupState<T> extends State<_ObjectFormFieldPopup<T>>
     final theme = Theme.of(context);
     return Data<ObjectFormHandler<T>>.inherit(
       data: this,
-      child: SurfaceCard(
-        padding: widget.popoverPadding ??
-            (const EdgeInsets.symmetric(vertical: 16, horizontal: 16) *
-                theme.scaling),
-        child: widget.editorBuilder(
-          context,
-          this,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.background,
+          borderRadius: theme.borderRadiusXl,
+        ),
+        child: SurfaceCard(
+          padding: widget.popoverPadding ??
+              (const EdgeInsets.symmetric(vertical: 16, horizontal: 16) *
+                  theme.scaling),
+          child: widget.editorBuilder(
+            context,
+            this,
+          ),
         ),
       ),
     );
