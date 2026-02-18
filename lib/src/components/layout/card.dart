@@ -99,7 +99,7 @@ class SurfaceCard extends StatelessWidget {
         child: child,
       );
     }
-    return Card(
+    Widget card = Card(
       clipBehavior: clipBehavior,
       borderRadius: borderRadius,
       borderWidth: borderWidth,
@@ -113,5 +113,16 @@ class SurfaceCard extends StatelessWidget {
       duration: duration,
       child: child,
     );
+    final resolvedOpacity = surfaceOpacity ?? theme.surfaceOpacity;
+    if (resolvedOpacity != null && resolvedOpacity < 1) {
+      card = DecoratedBox(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.background,
+          borderRadius: borderRadius ?? theme.borderRadiusXl,
+        ),
+        child: card,
+      );
+    }
+    return card;
   }
 }
