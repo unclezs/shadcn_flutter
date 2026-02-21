@@ -43,3 +43,11 @@ build/
 .idea/
 /docs/ios/Podfile
 /docs/macos/Podfile
+
+# AI tool configurations
+.claude/
+.cursor/
+.copilot/
+.aider*
+.codeium/
+CLAUDE.md

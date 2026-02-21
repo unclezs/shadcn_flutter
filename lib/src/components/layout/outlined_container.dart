@@ -132,6 +132,16 @@ class _OutlinedContainerState extends State<OutlinedContainer> {
         child: widget.child,
       ),
     );
+    // 防止背景色透明时透出底层内容
+    if (backgroundColor.a < 1) {
+      childWidget = DecoratedBox(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.background,
+          borderRadius: borderRadius,
+        ),
+        child: childWidget,
+      );
+    }
     if (widget.surfaceBlur != null && widget.surfaceBlur! > 0) {
       childWidget = SurfaceBlur(
         surfaceBlur: widget.surfaceBlur!,
