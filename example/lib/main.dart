@@ -3,9 +3,6 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   runApp(const MyApp());
 }
 
@@ -15,8 +12,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShadcnApp(
-      title: 'My App',
-      home: const CounterPage(),
+      title: 'Context Menu Example',
+      home: const ContextMenuDemo(),
       theme: ThemeData(
         colorScheme: ColorSchemes.darkZinc(),
         radius: 0.7,
@@ -25,118 +22,137 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class CounterPage extends StatefulWidget {
-  const CounterPage({super.key});
+class ContextMenuDemo extends StatefulWidget {
+  const ContextMenuDemo({super.key});
 
   @override
-  _CounterPageState createState() => _CounterPageState();
+  State<ContextMenuDemo> createState() => _ContextMenuDemoState();
 }
 
-class _CounterPageState extends State<CounterPage> {
-  int _counter = 0;
-
-  int _selected = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  NavigationItem _buildButton(String label, IconData icon) {
-    return NavigationItem(
-      label: Text(label),
-      child: Icon(icon),
-    );
-  }
+class _ContextMenuDemoState extends State<ContextMenuDemo> {
+  int people = 0;
+  bool showBookmarksBar = false;
+  bool showFullUrls = true;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      headers: [
-        AppBar(
-          title: const Text('Counter App'),
-          subtitle: const Text('A simple counter app'),
-          leading: [
-            GhostButton(
-              onPressed: () {
-                openDrawer(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                      alignment: Alignment.center,
-                      constraints: const BoxConstraints(
-                        maxWidth: 300,
-                      ),
-                      child: const Text('Drawer'),
-                    );
-                  },
-                  position: OverlayPosition.left,
-                );
+      child: Center(
+        child: ContextMenu(
+          items: [
+            const MenuButton(
+              trailing: MenuShortcut(
+                activator: SingleActivator(
+                  LogicalKeyboardKey.bracketLeft,
+                  control: true,
+                ),
+              ),
+              child: Text('Back'),
+            ),
+            const MenuButton(
+              trailing: MenuShortcut(
+                activator: SingleActivator(
+                  LogicalKeyboardKey.bracketRight,
+                  control: true,
+                ),
+              ),
+              enabled: false,
+              child: Text('Forward'),
+            ),
+            const MenuButton(
+              trailing: MenuShortcut(
+                activator: SingleActivator(
+                  LogicalKeyboardKey.keyR,
+                  control: true,
+                ),
+              ),
+              child: Text('Reload'),
+            ),
+            const MenuButton(
+              subMenu: [
+                MenuButton(
+                  trailing: MenuShortcut(
+                    activator: SingleActivator(
+                      LogicalKeyboardKey.keyS,
+                      control: true,
+                    ),
+                  ),
+                  child: Text('Save Page As...'),
+                ),
+                MenuButton(
+                  child: Text('Create Shortcut...'),
+                ),
+                MenuButton(
+                  child: Text('Name Window...'),
+                ),
+                MenuDivider(),
+                MenuButton(
+                  child: Text('Developer Tools'),
+                ),
+              ],
+              child: Text('More Tools'),
+            ),
+            const MenuDivider(),
+            MenuCheckbox(
+              value: showBookmarksBar,
+              onChanged: (context, value) {
+                setState(() {
+                  showBookmarksBar = value;
+                });
               },
-              density: ButtonDensity.icon,
-              child: const Icon(Icons.menu),
+              autoClose: false,
+              trailing: const MenuShortcut(
+                activator: SingleActivator(
+                  LogicalKeyboardKey.keyB,
+                  control: true,
+                  shift: true,
+                ),
+              ),
+              child: const Text('Show Bookmarks Bar'),
+            ),
+            MenuCheckbox(
+              value: showFullUrls,
+              onChanged: (context, value) {
+                setState(() {
+                  showFullUrls = value;
+                });
+              },
+              autoClose: false,
+              child: const Text('Show Full URLs'),
+            ),
+            const MenuDivider(),
+            const MenuLabel(child: Text('People')),
+            const MenuDivider(),
+            MenuRadioGroup(
+              value: people,
+              onChanged: (context, value) {
+                setState(() {
+                  people = value;
+                });
+              },
+              children: const [
+                MenuRadio(
+                  value: 0,
+                  autoClose: false,
+                  child: Text('Pedro Duarte'),
+                ),
+                MenuRadio(
+                  value: 1,
+                  autoClose: false,
+                  child: Text('Colm Tuite'),
+                ),
+              ],
             ),
           ],
-          trailing: [
-            GhostButton(
-              density: ButtonDensity.icon,
-              onPressed: () {
-                openSheet(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                      alignment: Alignment.center,
-                      constraints: const BoxConstraints(
-                        maxWidth: 200,
-                      ),
-                      child: const Text('Sheet'),
-                    );
-                  },
-                  position: OverlayPosition.right,
-                );
-              },
-              child: const Icon(Icons.search),
-            ),
-          ],
-        ),
-        const Divider(),
-      ],
-      footers: [
-        const Divider(),
-        NavigationBar(
-          onSelected: (i) {
-            setState(() {
-              _selected = i;
-            });
-          },
-          index: _selected,
-          children: [
-            _buildButton('Home', Icons.home),
-            _buildButton('Explore', Icons.explore),
-            _buildButton('Library', Icons.library_music),
-          ],
-        ),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'You have pushed the button this many times:',
-                textAlign: TextAlign.center,
-              ).p(),
-              Text(
-                '$_counter',
-              ).h1(),
-              PrimaryButton(
-                onPressed: _incrementCounter,
-                density: ButtonDensity.icon,
-                child: const Icon(Icons.add),
-              ).p(),
-            ],
+          child: DashedContainer(
+            borderRadius: BorderRadius.circular(theme.radiusMd),
+            strokeWidth: 2,
+            gap: 2,
+            child: const Text('Right click here').center(),
+          ).constrained(
+            maxWidth: 300,
+            maxHeight: 200,
           ),
         ),
       ),

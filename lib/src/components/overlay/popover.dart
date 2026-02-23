@@ -549,6 +549,7 @@ class PopoverOverlayWidgetState extends State<PopoverOverlayWidget>
 
   @override
   Widget build(BuildContext context) {
+    final safePadding = MediaQuery.paddingOf(context);
     Widget childWidget = Data<OverlayHandlerStateMixin>.inherit(
       data: this,
       child: TapRegion(
@@ -570,6 +571,14 @@ class PopoverOverlayWidgetState extends State<PopoverOverlayWidget>
             builder: (context, child) {
               final theme = Theme.of(context);
               final scaling = theme.scaling;
+              final minMargin = const EdgeInsets.all(16);
+              final resolvedMargin = _margin?.optionallyResolve(context);
+              final effectiveMargin = EdgeInsets.fromLTRB(
+                max(minMargin.left * scaling, safePadding.left + minMargin.left * scaling),
+                max(minMargin.top * scaling, safePadding.top + minMargin.top * scaling),
+                max(minMargin.right * scaling, safePadding.right + minMargin.right * scaling),
+                max(minMargin.bottom * scaling, safePadding.bottom + minMargin.bottom * scaling),
+              );
               return PopoverLayout(
                 alignment: _alignment.optionallyResolve(context),
                 position: _position,
@@ -578,8 +587,14 @@ class PopoverOverlayWidgetState extends State<PopoverOverlayWidget>
                 widthConstraint: _widthConstraint,
                 heightConstraint: _heightConstraint,
                 offset: _offset,
-                margin: _margin?.optionallyResolve(context) ??
-                    (const EdgeInsets.all(8) * scaling),
+                margin: resolvedMargin != null
+                    ? EdgeInsets.fromLTRB(
+                        max(resolvedMargin.left, effectiveMargin.left),
+                        max(resolvedMargin.top, effectiveMargin.top),
+                        max(resolvedMargin.right, effectiveMargin.right),
+                        max(resolvedMargin.bottom, effectiveMargin.bottom),
+                      )
+                    : effectiveMargin,
                 scale: tweenValue(0.9, 1.0, widget.animation.value),
                 scaleAlignment: (widget.transitionAlignment ?? _alignment)
                     .optionallyResolve(context),
