@@ -550,6 +550,7 @@ class PopoverOverlayWidgetState extends State<PopoverOverlayWidget>
   @override
   Widget build(BuildContext context) {
     final safePadding = MediaQuery.paddingOf(context);
+    final viewInsets = MediaQuery.viewInsetsOf(context);
     Widget childWidget = Data<OverlayHandlerStateMixin>.inherit(
       data: this,
       child: TapRegion(
@@ -577,7 +578,7 @@ class PopoverOverlayWidgetState extends State<PopoverOverlayWidget>
                 max(minMargin.left * scaling, safePadding.left + minMargin.left * scaling),
                 max(minMargin.top * scaling, safePadding.top + minMargin.top * scaling),
                 max(minMargin.right * scaling, safePadding.right + minMargin.right * scaling),
-                max(minMargin.bottom * scaling, safePadding.bottom + minMargin.bottom * scaling),
+                max(minMargin.bottom * scaling, safePadding.bottom + viewInsets.bottom + minMargin.bottom * scaling),
               );
               return PopoverLayout(
                 alignment: _alignment.optionallyResolve(context),
