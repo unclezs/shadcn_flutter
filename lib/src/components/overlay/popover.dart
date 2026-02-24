@@ -572,7 +572,7 @@ class PopoverOverlayWidgetState extends State<PopoverOverlayWidget>
             builder: (context, child) {
               final theme = Theme.of(context);
               final scaling = theme.scaling;
-              final minMargin = const EdgeInsets.all(16);
+              const minMargin = EdgeInsets.all(16);
               final resolvedMargin = _margin?.optionallyResolve(context);
               final effectiveMargin = EdgeInsets.fromLTRB(
                 max(minMargin.left * scaling, safePadding.left + minMargin.left * scaling),

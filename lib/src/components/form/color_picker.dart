@@ -760,33 +760,34 @@ class _ColorPickerSetState extends State<ColorPickerSet> {
     }
   }
 
-  /// 尝试解析并应用输入框中的 hex 值
-  void _applyHexInput() {
-    var hex = _hexController.text;
+  Color? _parseHexInput(String input) {
+    var hex = input.trim();
     if (hex.startsWith('#')) hex = hex.substring(1);
     hex = hex.toLowerCase();
-    try {
-      Color? color;
-      if (hex.length == 6) {
-        color = Color(int.parse('FF$hex', radix: 16));
-      } else if (hex.length == 8) {
-        color = Color(int.parse(hex, radix: 16));
-      }
-      if (color != null) {
-        widget.onColorChanged?.call(ColorDerivative.fromColor(color));
-        return;
-      }
-    } catch (_) {
-      // 解析失败，恢复当前颜色
+    if (hex.length != 6 && hex.length != 8) return null;
+
+    final value = int.tryParse(hex.length == 6 ? 'FF$hex' : hex, radix: 16);
+    if (value == null) return null;
+    return Color(value);
+  }
+
+  /// 尝试解析并应用输入框中的 hex 值
+  void _applyHexInput({bool restoreOnInvalid = true}) {
+    final parsedColor = _parseHexInput(_hexController.text);
+    if (parsedColor != null) {
+      widget.onColorChanged?.call(ColorDerivative.fromColor(parsedColor));
+      return;
     }
-    // 无效输入，恢复当前颜色
-    _updateControllers();
+    if (restoreOnInvalid) {
+      // 无效输入，恢复当前颜色
+      _updateControllers();
+    }
   }
 
   void _updateControllers() {
     // 如果正在编辑，不要覆盖用户输入
     if (_isEditing) return;
-    
+
     var rgbColor = widget.color.toColor();
     if (widget.showAlpha) {
       _hexController.text =
@@ -831,6 +832,10 @@ class _ColorPickerSetState extends State<ColorPickerSet> {
             focusNode: _hexFocusNode,
             style: theme.typography.mono,
             onSubmitted: (_) => _hexFocusNode.unfocus(),
+            onChanged: (_) {
+              // 输入过程中只在格式有效时同步，不打断用户输入。
+              _applyHexInput(restoreOnInvalid: false);
+            },
             onEditingComplete: () {
               _isEditing = false;
               _applyHexInput();
