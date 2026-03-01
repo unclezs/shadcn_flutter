@@ -68,6 +68,7 @@ class OutlinedContainer extends StatefulWidget {
   final double? width;
   final double? height;
   final Duration? duration;
+  final bool opaque;
   const OutlinedContainer({
     super.key,
     required this.child,
@@ -84,6 +85,7 @@ class OutlinedContainer extends StatefulWidget {
     this.width,
     this.height,
     this.duration,
+    this.opaque = false,
   });
 
   @override
@@ -132,8 +134,7 @@ class _OutlinedContainerState extends State<OutlinedContainer> {
         child: widget.child,
       ),
     );
-    // 防止背景色透明时透出底层内容
-    if (backgroundColor.a < 1) {
+    if (widget.opaque && backgroundColor.a < 1) {
       childWidget = DecoratedBox(
         decoration: BoxDecoration(
           color: theme.colorScheme.background,

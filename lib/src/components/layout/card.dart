@@ -13,6 +13,7 @@ class Card extends StatelessWidget {
   final double? surfaceOpacity;
   final double? surfaceBlur;
   final Duration? duration;
+  final bool opaque;
 
   const Card({
     super.key,
@@ -28,6 +29,7 @@ class Card extends StatelessWidget {
     this.surfaceOpacity,
     this.surfaceBlur,
     this.duration,
+    this.opaque = false,
   });
 
   @override
@@ -47,6 +49,7 @@ class Card extends StatelessWidget {
       surfaceOpacity: surfaceOpacity,
       surfaceBlur: surfaceBlur,
       duration: duration,
+      opaque: opaque,
       child: DefaultTextStyle.merge(
         child: child,
         style: TextStyle(
@@ -70,6 +73,7 @@ class SurfaceCard extends StatelessWidget {
   final double? surfaceOpacity;
   final double? surfaceBlur;
   final Duration? duration;
+  final bool opaque;
 
   const SurfaceCard({
     super.key,
@@ -85,6 +89,7 @@ class SurfaceCard extends StatelessWidget {
     this.surfaceOpacity,
     this.surfaceBlur,
     this.duration,
+    this.opaque = false,
   });
 
   @override
@@ -111,6 +116,7 @@ class SurfaceCard extends StatelessWidget {
       surfaceOpacity: surfaceOpacity ?? theme.surfaceOpacity,
       surfaceBlur: surfaceBlur ?? theme.surfaceBlur,
       duration: duration,
+      opaque: opaque,
       child: child,
     );
   }
