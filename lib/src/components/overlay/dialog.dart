@@ -90,6 +90,7 @@ class ModalContainer extends StatelessWidget {
   final double? surfaceOpacity;
   final double? surfaceBlur;
   final Duration? duration;
+  final bool opaque;
   const ModalContainer({
     super.key,
     required this.child,
@@ -104,6 +105,7 @@ class ModalContainer extends StatelessWidget {
     this.surfaceOpacity,
     this.surfaceBlur,
     this.duration,
+    this.opaque = false,
   });
 
   @override
@@ -121,6 +123,7 @@ class ModalContainer extends StatelessWidget {
       surfaceOpacity: surfaceOpacity,
       surfaceBlur: surfaceBlur,
       duration: duration,
+      opaque: opaque,
       child: child,
     );
   }

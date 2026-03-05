@@ -1050,6 +1050,7 @@ class _SelectPopupState<T> extends State<SelectPopup<T>>
         clipBehavior: Clip.hardEdge,
         surfaceBlur: widget.surfaceBlur,
         surfaceOpacity: widget.surfaceOpacity,
+        opaque: true,
         padding: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
