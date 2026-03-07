@@ -251,7 +251,7 @@ class _DrawerWrapperState extends State<DrawerWrapper>
     _controller = widget.animationController ??
         AnimationController(
           vsync: this,
-          duration: const Duration(milliseconds: 350),
+          duration: const Duration(milliseconds: 250),
         );
     _extraOffset = ControlledAnimation(_controller);
   }
@@ -588,7 +588,7 @@ class _DrawerWrapperState extends State<DrawerWrapper>
       _controller = widget.animationController ??
           AnimationController(
             vsync: this,
-            duration: const Duration(milliseconds: 350),
+            duration: const Duration(milliseconds: 250),
           );
     }
   }
@@ -1333,7 +1333,7 @@ class DrawerEntryWidgetState<T> extends State<DrawerEntryWidget<T>>
     super.initState();
     _controller = widget.animationController ??
         AnimationController(
-            vsync: this, duration: const Duration(milliseconds: 350));
+            vsync: this, duration: const Duration(milliseconds: 250));
 
     _controlledAnimation = ControlledAnimation(_controller);
     if (widget.animationController == null && widget.autoOpen) {
@@ -1361,7 +1361,7 @@ class DrawerEntryWidgetState<T> extends State<DrawerEntryWidget<T>>
       _controller = widget.animationController ??
           AnimationController(
             vsync: this,
-            duration: const Duration(milliseconds: 350),
+            duration: const Duration(milliseconds: 250),
           );
     }
   }
