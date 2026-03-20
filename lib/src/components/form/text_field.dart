@@ -1999,7 +1999,9 @@ class TextFieldState extends State<TextField>
             }
             _formatSubmit();
           },
-          onTapOutside: widget.onTapOutside,
+          onTapOutside: widget.onTapOutside ?? (_) {
+            _effectiveFocusNode.unfocus();
+          },
           inputFormatters: formatters,
           rendererIgnoresPointer: true,
           cursorWidth: widget.cursorWidth,
